@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import Header from '../components/Header';
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { getDefaultWallets, RainbowKitProvider, lightTheme, Theme } from '@rainbow-me/rainbowkit';
 import type { AppProps } from 'next/app';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
@@ -40,10 +40,18 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
+const myCustomTheme:Theme = lightTheme({
+    colors: {
+        accentColor: "#FFCB15",
+        accentColorForeground: "black",
+        connectButtonBackground: "#FFCB15",
+}
+})
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
+      <RainbowKitProvider chains={chains} theme={myCustomTheme}>
         <Header />
         <main className="flex flex-col items-center">
             <Component {...pageProps} />
