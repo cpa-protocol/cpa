@@ -1,4 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import BlocksList from '../../components/CampaignDashboard/CampaignBlock';
 import SelectRole from '../../components/SelectRole/SelectRole';
 import type { NextPage } from 'next';
 import {
@@ -9,6 +10,13 @@ import styles from '../../styles/Home.module.css';
 
 const Protocol: NextPage = () => {
   const { address, connector, isConnected } = useAccount();
+    const testBlocks = [
+        {
+            title: "Block 1",
+            createTime: "2021-09-01",
+            description: "This is a test block",
+        }]
+
   return (
       <>
       <main className={styles.main}>
@@ -24,7 +32,7 @@ const Protocol: NextPage = () => {
               </>
           ) : (
               <>
-                  <SelectRole />
+                  <BlocksList blocks={testBlocks} />
               </>)
       }
       </main>
