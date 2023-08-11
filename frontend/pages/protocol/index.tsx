@@ -12,9 +12,10 @@ const Protocol: NextPage = () => {
   const { address, connector, isConnected } = useAccount();
     const testBlocks = [
         {
-            title: "Block 1",
-            createTime: "2021-09-01",
-            description: "This is a test block",
+            title: "Campaign 1",
+            createTime: "2023-08-01",
+            totalSupply: "100",
+            claimed: "99"
         }]
 
   return (
@@ -32,8 +33,14 @@ const Protocol: NextPage = () => {
               </>
           ) : (
               <>
+                  <div className="flex flex-col justify-left">
+                  <div  className="text-3xl m-4">
+                      Campaign Dashboard
+                  </div>
                   <BlocksList blocks={testBlocks} />
-              </>)
+                  </div>
+              </>
+          )
       }
       </main>
     </>

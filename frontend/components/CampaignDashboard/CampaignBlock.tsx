@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
+
 function RoleBlock({role, description, image, link} : {role: string, description: string, image: string, link: string}){
     return (
     <div className="flex flex-col relative rounded-3xl border-2 border-zinc-100 items-center">
@@ -42,17 +43,17 @@ function BlocksList({ blocks }) {
   return (
     <div className="grid grid-cols-3 gap-4">
       {blocks.map((block, index) => (
-        <div key={index} className="border p-4 rounded">
+        <div key={index} className="border p-4 rounded-3xl">
           <h3 className="font-bold">{block.title}</h3>
-          <p className="text-sm text-gray-600">{block.createTime}</p>
-          <p>{block.description}</p>
+          <p className="text-sm text-gray-600 mb-10">{block.createTime}</p>
+          <p className="">{block.claimed} / {block.totalSupply} claimed </p>
         </div>
       ))}
       <div
-        className="border p-4 rounded bg-gray-200 text-gray-400 cursor-pointer"
+        className="border p-4 rounded-3xl text-gray-400 cursor-pointer text-center"
         onClick={() => setShowPopup(true)}
       >
-        Add New Block
+          Create New
       </div>
       {showPopup && <AddBlockPopup onClose={() => setShowPopup(false)} />}
     </div>
@@ -194,7 +195,7 @@ function CampaignForm({onClose}){
 function AddBlockPopup({ onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded shadow-lg">
+        <div className="bg-white p-8 rounded-3xl shadow-lg">
         <h2 className="text-xl font-bold mb-4">Create Campaign</h2>
         <CampaignForm onClose={onClose}/>
       </div>
