@@ -1,4 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useState } from 'react';
 import Link from 'next/link';
 import VerifyWorldId from '../../components/MintCollabNFT/VerifyWorldId';
 import type { NextPage } from 'next';
@@ -24,9 +25,44 @@ const MintPage: NextPage = () => {
                   First verify you are a human
               </div>
               <VerifyWorldId />
+              <MyComponent />
           </div>
       </>
   );
 };
+
+
+function MyComponent() {
+  const [addresses, setAddresses] = useState([
+      '0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad',
+      '0x47625465f936920Efa00e33391125fCcfA106d84',
+      '0xca84541D8B8Bf50fd8b042aCFd28B1e390703E20'
+    // Add more addresses if needed
+  ]);
+  const [result, setResult] = useState(null);
+
+  const checkAddresses = async () => {
+    try {
+      const response = await fetch('/api/checkEligible', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ addresses }),
+      });
+      const data = await response.json();
+      setResult(data);
+    } catch (error) {
+      console.error('Error calling API:', error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={checkAddresses}>Check Addresses</button>
+      {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
+    </div>
+  );
+}
 
 export default MintPage;

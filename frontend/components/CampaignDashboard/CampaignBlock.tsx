@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { parseEther } from "viem";
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Upload from '../Upload';
@@ -23,6 +24,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
+
 
 
 function RoleBlock({role, description, image, link} : {role: string, description: string, image: string, link: string}){
@@ -65,26 +73,80 @@ function BlocksList({ blocks }) {
 
 const FormSchema = z
   .object({
-    CampaignName: z.string().nonempty("Required"),
+    CampaignName: z.string(),
     TargetAudienceSize: z.coerce.number(),
     Cpa: z.coerce.number(),
-    Address: z.string().nonempty("Required"),
+    Address: z.string(),
     GraphQL: z.string()
   });
 
 function CampaignForm({onClose}){
-    const router = useRouter();
+  const router = useRouter();
+  const { address, connector, isConnected } = useAccount();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
+    const {watch} = form;
     const handleUploadSuccess = (url) => {
         console.log(url);
         form.setValue("GraphQL", url);
     };
+    const audienceSize = watch("TargetAudienceSize");
+    const cpa = watch("Cpa");
+    if (audienceSize && cpa) {
+        const reward = audienceSize * cpa;
+    }
+    const graphQL = watch("GraphQL");
+
+
     const onSubmit = () => {
-        console.log(form.getValues());
-        onClose();
-        router.reload();
+      console.log(form.getValues());
+      const cpa = form.getValues().Cpa;
+      const targetAudienceSize = form.getValues().TargetAudienceSize;
+
+      const {
+        config,
+        error: prepareError,
+        isError: isPrepareError,
+      } = usePrepareContractWrite({
+        address: "0x47625465f936920Efa00e33391125fCcfA106d84",
+        abi: [
+            {
+                "inputs": [
+                    {
+                        "internalType": "int256",
+                        "name": "reward",
+                        "type": "int256"
+                    },
+                    {
+                        "internalType": "int256",
+                        "name": "cpa",
+                        "type": "int256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "query",
+                        "type": "string"
+                    }
+                ],
+                "name": "createCampaign",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "payable",
+                "type": "function"
+            },
+        ],
+        functionName: "mintAdUnit",
+        args: [parseEther(cpa*targetAudienceSize), cpa, graphQL],
+        value: parseEther(cpa*targetAudienceSize),
+      });
+      const { data, error, isError, write } = useContractWrite(config);
+        write?.();
     };
     return (
     <div className="w-full">
@@ -140,7 +202,7 @@ function CampaignForm({onClose}){
             name="Address"
             render={({ field }) => (
               <FormItem>
-                <FormLabel> Address </FormLabel>
+                <FormLabel> Contract to promote </FormLabel>
                 <FormControl>
                   <Input type="text" {...field} placeholder="0x123..." />
                 </FormControl>
