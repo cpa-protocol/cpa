@@ -1,5 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import BlocksList from '../../components/CampaignDashboard/CampaignBlock';
+import CollabList from '../../components/CollabDashboard/CollabList';
 import SelectRole from '../../components/SelectRole/SelectRole';
 import type { NextPage } from 'next';
 import {
@@ -12,11 +12,20 @@ const Protocol: NextPage = () => {
   const { address, connector, isConnected } = useAccount();
     const testBlocks = [
         {
-            title: "Campaign 1",
-            createTime: "2023-08-01",
-            totalSupply: "100",
-            claimed: "99"
-        }]
+            Title: "New Character Raffle",
+            RemainQuota: "99",
+            RewardPerAction: "0.01",
+            Status: "Active"
+        },
+        {
+            Title: "Transfer Crypto",
+            RemainQuota: "100",
+            RewardPerAction: "0.001",
+            Status: "Accepted",
+            Link: "https://www.google.com"
+        }
+
+    ]
 
   return (
       <>
@@ -35,9 +44,9 @@ const Protocol: NextPage = () => {
               <>
                   <div className="flex flex-col justify-left">
                   <div  className="text-3xl m-4">
-                      Campaign Dashboard
+                      Explore Campaigns
                   </div>
-                  <BlocksList blocks={testBlocks} />
+                  <CollabList blocks={testBlocks} />
                   </div>
               </>
           )

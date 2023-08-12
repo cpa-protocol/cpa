@@ -1,0 +1,22 @@
+QueryURL: https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3
+
+GraphQL:
+'''
+query GetSwapsBySender($senderAddress: Bytes!) {
+  swaps(orderBy: timestamp, orderDirection: desc, where: { sender: $senderAddress }) {
+    transaction {
+      id
+    }
+  }
+}
+'''
+
+ValueToCheck:
+'''
+function(data) {
+    if (data.swaps && data.swaps.transaction.length >= 1) {
+        return 1
+    }
+    return 0
+}
+'''
