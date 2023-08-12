@@ -1,5 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import Upload from '../Upload';
 import Link from 'next/link';
 import * as z from "zod";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -67,16 +69,22 @@ const FormSchema = z
     TargetAudienceSize: z.coerce.number(),
     Cpa: z.coerce.number(),
     Address: z.string().nonempty("Required"),
-    Identifier: z.string().nonempty("Required"),
     GraphQL: z.string()
   });
 
 function CampaignForm({onClose}){
+    const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
+    const handleUploadSuccess = (url) => {
+        console.log(url);
+        form.setValue("GraphQL", url);
+    };
     const onSubmit = () => {
         console.log(form.getValues());
+        onClose();
+        router.reload();
     };
     return (
     <div className="w-full">
@@ -127,7 +135,6 @@ function CampaignForm({onClose}){
               />
           </div>
 
-          <div className="flex flex-row items-center w-full space-x-2">
           <FormField
             control={form.control}
             name="Address"
@@ -142,36 +149,7 @@ function CampaignForm({onClose}){
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="Identifier"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel> Identifier </FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} placeholder="0x..." />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-      </div>
-          <FormField
-            control={form.control}
-            name="GraphQL"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel> GraphQL Code </FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} placeholder="{}" />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
+          <Upload onUploadSuccess={handleUploadSuccess} />
 
           <div className="flex flex-row items-center w-full space-x-2 justify-between">
               <Button type="submit" className="mt-4">

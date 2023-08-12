@@ -20,7 +20,7 @@ const MintPage: NextPage = () => {
   return (
       <>
           <div className='flex flex-col justify-center'>
-              <div className='items-center mb-4'>
+              <div className='mb-4'>
                   First verify you are a human
               </div>
               <VerifyWorldId />

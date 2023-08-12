@@ -1,6 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import LogoIcon from '@/components/icons/LogoIcon'
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { NextPage } from 'next';
 import { useAccount } from "wagmi";
@@ -13,6 +13,7 @@ const app_id= 'app_staging_7d739ad0b13ae36395a73a4c9e8fa198';
 
 function VerifyWorldId() {
   const { address, connector, isConnected } = useAccount();
+  const [verified, setVerified] = useState(false);
 
     const onSuccess= (data: ISuccessResult) => {
         console.log(data);
@@ -36,6 +37,7 @@ function VerifyWorldId() {
               .then((verifyResponse) => {
                 // Handle the response from the /api/verify endpoint
                 console.log(verifyResponse);
+                setVerified(true);
               })
               .catch((error) => {
                 console.error('An error occurred:', error);
@@ -48,8 +50,6 @@ function VerifyWorldId() {
             app_id="app_staging_7d739ad0b13ae36395a73a4c9e8fa198" // obtained from the Developer Portal
             action="mint-collab-nft" // this is your action name from the Developer Portal
             onSuccess={onSuccess} // callback when the modal is closed
-            credential_types={['orb', 'phone']} // optional, defaults to ['orb']
-            enableTelemetry // optional, defaults to false
         >
       {({ open }) => 
             <button
@@ -64,6 +64,15 @@ function VerifyWorldId() {
             }
         </IDKitWidget>
       </div>
+      {verified && (
+          <div className="flex flex-col items-center">
+                <div className="text-black text-4xl font-bold my-16">
+                    You are verified!
+                </div>
+            </div>
+      )
+      }
+
     </div>
   );
 };
