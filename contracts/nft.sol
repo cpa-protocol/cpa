@@ -27,4 +27,57 @@ contract NFT {
     event CreateZoraContract(address nftContract);
     event CreateToken(uint256 indexed campaignId,address indexed owner, uint256 tokenId);
 
+    constructor(address _cpa) {
+        console.log("Owner contract deployed by:", msg.sender);
+        owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
+        cpa = _cpa;
+        emit OwnerSet(address(0), owner);
+    }
+
+    function setUpNFT(uint256 campaignId,string memory campaignName, string memory contractURI) public {
+    
+        bytes[] memory initSetup = new bytes[](1);
+        initSetup[0] = abi.encodeWithSelector(
+            IZoraCreator1155.setupNewToken.selector,
+            "ipfs://test",
+            1000
+        );
+        IZoraCreator1155Factory factory = IZoraCreator1155Factory(zoraFatory);
+        address deployedAddress = factory.createContract(
+            contractURI,
+            campaignName,
+            ICreatorRoyaltiesControl.RoyaltyConfiguration({
+                royaltyBPS: 0,
+                royaltyRecipient: msg.sender,
+                royaltyMintSchedule: 0
+            }),
+            payable(address(this)),
+            initSetup
+        );
+
+        emit CreateZoraContract(deployedAddress);
+
+        IZoraCreator1155 target = IZoraCreator1155(deployedAddress);
+        uint256 tokenId = target.setupNewToken("ipfs://test", 1000);
+
+        InfluencerNFT memory newInfluencerNft;
+        newInfluencerNft.campaignId = campaignId;
+        newInfluencerNft.tokenId = tokenId;
+        newInfluencerNft.zora = deployedAddress;
+
+        influencersNftContract[msg.sender][campaignId] = newInfluencerNft;
+        CPA(cpa).updateInfluencerTokenId(campaignId, msg.sender, tokenId);
+
+        emit CreateToken(campaignId, msg.sender,tokenId);
+    }
+
+    function mint(address influencer, uint256 campaignId) public returns (bool) {
+        InfluencerNFT memory influencerNft = influencersNftContract[influencer][campaignId];
+        IZoraCreator1155 target = IZoraCreator1155(influencerNft.zora);
+        
+        target.adminMint(msg.sender, influencerNft.tokenId, 1, "");
+        
+        return true;
+    }
+
 }
