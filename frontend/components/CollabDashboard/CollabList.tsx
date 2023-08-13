@@ -11,18 +11,7 @@ import * as z from "zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 
-function CollabDashboard() {
-  const {data : campaigns, isLoading, isSuccess} = useGetAllCampaigns();
-    if (isSuccess) {
-        console.log('campaigns are');
-        console.log(campaigns[0]);
-    };
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen py-2">
-            {isSuccess && <CollabList blocks={campaigns} />}
-        </div>
-    )
-}
+
 
 function CollabList({ blocks }) {
   const [showDetails, setShowDetails] = useState(false);
@@ -32,7 +21,7 @@ function CollabList({ blocks }) {
 
   const handleViewDetails = (collab) => {
     setSelectedCollab(collab);
-    console.log(selectedCollab);
+    console.log(collab);
     setShowDetails(true);
   };
 
@@ -42,7 +31,6 @@ function CollabList({ blocks }) {
         {blocks.map((block, index) => (
           <div key={index} className="border p-4 rounded-3xl">
             <h3 className="font-bold">{block.name}</h3>
-            {console.log(typeof block.audience)}
             <p className="text-sm text-gray-600"> Quota: {`${block.audience}`}</p>
             <p className="text-sm text-gray-600 mb-10"> Reward per action : {formatEther(`${block.cpa}`)} ETH</p>
             {
@@ -64,6 +52,13 @@ function CollabList({ blocks }) {
   );
 }
 
+function CollabDashboard() {
+  const {data : campaigns, isLoading, isSuccess} = useGetAllCampaigns();
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen py-2">
+            {isSuccess && <CollabList blocks={campaigns} />}
+        </div>
+    )
+}
+
 export default CollabDashboard;
-
-
