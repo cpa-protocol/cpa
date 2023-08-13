@@ -13,18 +13,33 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import useSetUpNFT from '@/hooks/useSetUpNFT';
 
-const IssueCollabNFT = (campaign) => {
+const IssueCollabNFT = (props) => {
+    const {campaign, address, handleViewDetails}  = props
     console.log(campaign);
-    const { write, isLoading, isSuccess } = useSetUpNFT(campaign.id.toNumber(), campaign.name, 'testurl');
+    const { write, isLoading, isSuccess } = useSetUpNFT(Number(campaign.id.toString()), campaign.name, 'testurl');
+    const { data,  isLoading:influencerIsLoading, } = useInfluencersNftContract(address, campaign.id);
+    //@ts-ignore
+    const contractExist = data ? data[2] =="0x0000000000000000000000000000000000000000" : false
+
     const onSubmit = () => {
         if (write) {
             write();
         }
     }
   return (
-    <div>
-      <Button onClick={onSubmit}>Issue Collab NFT</Button>
-    </div>
+    <>
+      {
+        isLoading ? 'Loading' : contractExist ? 
+          <div>
+            <Button onClick={onSubmit}>Issue Collab NFT</Button>
+          </div>
+          :
+          <div>
+            <Button onClick={() => handleViewDetails(campaign)}>View Details</Button>
+          </div>
+      }
+    </>
+    
   );
 };
 
@@ -51,17 +66,7 @@ function CollabList({ blocks }) {
             <h3 className="font-bold">{block.name}</h3>
             <p className="text-sm text-gray-600"> Quota: {`${block.audience}`}</p>
             <p className="text-sm text-gray-600 mb-10"> Reward per action : {formatEther(`${block.cpa}`)} ETH</p>
-            {
-                (useInfluencersNftContract(address, Number(block.id)).data[2]=="0x0000000000000000000000000000000000000000") ? (
-                <div>
-                    <IssueCollabNFT campaign={block}/>
-                </div>
-              ) : (
-                <div>
-                  <Button onClick={() => handleViewDetails(block)}>View Details</Button>
-                </div>
-              )
-            }
+           <IssueCollabNFT campaign={block} address={address}  handleViewDetails={handleViewDetails}/>
           </div>
         ))}
       </div>
@@ -69,6 +74,8 @@ function CollabList({ blocks }) {
     </div>
   );
 }
+
+
 
 function CollabDashboard() {
   const {data : campaigns, isLoading, isSuccess} = useGetAllCampaigns();
