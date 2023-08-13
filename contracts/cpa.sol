@@ -9,6 +9,7 @@ import "hardhat/console.sol";
  * @dev Set & change owner
  */
 contract CPA {
+
     address private owner;
     address private updater;
 
@@ -33,11 +34,12 @@ contract CPA {
         string query;
     }
     struct Influencer{
+        address influencerAddress;
         uint256 tokenId; 
         int256 click;
         int256 reward;
     }
-    mapping(address => Campaign) public campaigns;
+    mapping(address => mapping(uint256 => Campaign)) public campaigns;
     mapping(uint256 => address) public campaignsOwner;
     mapping(uint256 => mapping(address => Influencer)) public influencers;
 
@@ -106,7 +108,7 @@ contract CPA {
         newCampaign.cpa = _cpa;
         newCampaign.audience = _reward / _cpa;
         newCampaign.query = _query;
-        campaigns[msg.sender] = newCampaign;
+        campaigns[msg.sender][totalCampaignAmount] = newCampaign;
         campaignsOwner[totalCampaignAmount] = msg.sender;
         emit CreateCampaign(_name, _promoteAddress, totalCampaignAmount, msg.sender, _reward, _cpa, _query);
 
@@ -116,6 +118,7 @@ contract CPA {
 
     function createInfluencer(uint256 campaignId) public returns (bool){
         Influencer memory newInfluencer;
+        newInfluencer.influencerAddress = msg.sender;
         newInfluencer.click = 0;
         newInfluencer.reward = 0;
         influencers[campaignId][msg.sender] = newInfluencer;
@@ -124,7 +127,7 @@ contract CPA {
         return true;
     }
 
-function updateInfluencerTokenId(uint256 campaignId, address influencer,uint256 tokenId) public{
+    function updateInfluencerTokenId(uint256 campaignId, address influencer,uint256 tokenId) public{
         Influencer storage influencerData =  influencers[campaignId][influencer];
         influencerData.tokenId = tokenId;
         
@@ -143,7 +146,7 @@ function updateInfluencerTokenId(uint256 campaignId, address influencer,uint256 
     function withdrawReward(uint256 campaignId) public returns (bool){
         Influencer storage influencer = influencers[campaignId][msg.sender];
         address  campaignOwner = campaignsOwner[campaignId];
-        Campaign storage campaign = campaigns[campaignOwner];
+        Campaign storage campaign = campaigns[campaignOwner][campaignId];
         int256 totalReward = campaign.cpa * influencer.click;
         int256 withdrawableReward = totalReward - influencer.reward;
         require(campaign.reward >= withdrawableReward, "Campaign reward not enough!");
@@ -152,6 +155,7 @@ function updateInfluencerTokenId(uint256 campaignId, address influencer,uint256 
         payable(msg.sender).transfer(uint(withdrawableReward));
         return true;
     }
+
 
 
     /**
@@ -173,8 +177,9 @@ function updateInfluencerTokenId(uint256 campaignId, address influencer,uint256 
     function getAllCampaigns() view public returns(Campaign[] memory) {
         Campaign[] memory campaignsArray = new Campaign[](totalCampaignAmount);
         for (uint i = 0; i < totalCampaignAmount; i++) {
-            campaignsArray[i] = campaigns[campaignsOwner[i]];
+            address campaignOwner = campaignsOwner[i];
+            campaignsArray[i] = campaigns[campaignOwner][i];
         }
         return campaignsArray;
     }
-}
+} 
