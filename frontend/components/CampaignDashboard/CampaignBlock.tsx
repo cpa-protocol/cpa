@@ -1,4 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import {useEffect } from "react";
+import { useCampaignCreateCampaign } from "../../src/generated";
 import { parseEther } from "viem";
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -93,58 +95,16 @@ function CampaignForm({onClose}){
     };
     const audienceSize = watch("TargetAudienceSize");
     const cpa = watch("Cpa");
-    if (audienceSize && cpa) {
-        const reward = audienceSize * cpa;
-    }
     const graphQL = watch("GraphQL");
+
+    const {data} = useCampaignCreateCampaign({
+        address: '0x47625465f936920Efa00e33391125fCcfA106d84',
+        args: [audienceSize, cpa, graphQL]
+    });
+
 
 
     const onSubmit = () => {
-      console.log(form.getValues());
-      const cpa = form.getValues().Cpa;
-      const targetAudienceSize = form.getValues().TargetAudienceSize;
-
-      const {
-        config,
-        error: prepareError,
-        isError: isPrepareError,
-      } = usePrepareContractWrite({
-        address: "0x47625465f936920Efa00e33391125fCcfA106d84",
-        abi: [
-            {
-                "inputs": [
-                    {
-                        "internalType": "int256",
-                        "name": "reward",
-                        "type": "int256"
-                    },
-                    {
-                        "internalType": "int256",
-                        "name": "cpa",
-                        "type": "int256"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "query",
-                        "type": "string"
-                    }
-                ],
-                "name": "createCampaign",
-                "outputs": [
-                    {
-                        "internalType": "bool",
-                        "name": "",
-                        "type": "bool"
-                    }
-                ],
-                "stateMutability": "payable",
-                "type": "function"
-            },
-        ],
-        functionName: "mintAdUnit",
-        args: [parseEther(cpa*targetAudienceSize), cpa, graphQL],
-        value: parseEther(cpa*targetAudienceSize),
-      });
       const { data, error, isError, write } = useContractWrite(config);
         write?.();
     };

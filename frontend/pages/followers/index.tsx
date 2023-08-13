@@ -39,6 +39,7 @@ function MyComponent() {
       '0xca84541D8B8Bf50fd8b042aCFd28B1e390703E20'
     // Add more addresses if needed
   ]);
+    const [configHash, setConfigHash] = useState('bafybeibsnbhomblnce3umj6rnn32dtvcpmcptklcn74pf4r5phdxm6e7te');
   const [result, setResult] = useState(null);
 
   const checkAddresses = async () => {
@@ -48,7 +49,7 @@ function MyComponent() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ addresses }),
+        body: JSON.stringify({ addresses, configHash}),
       });
       const data = await response.json();
       setResult(data);
