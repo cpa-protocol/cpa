@@ -21,7 +21,7 @@ const MintPage: NextPage = () => {
   const [influencer, setInfluencer] = useState<`0x${string}` | null>(null)
   const [campaign, setCampaign] = useState<number | null>(null)
   const { address, connector, isConnected } = useAccount();
-  const [verified, setVerified ] = useState(true);
+  const [verified, setVerified ] = useState(false);
   const { asPath, pathname, query } = useRouter();
   if(query.slug){
     if(query.slug[0] && influencer==null && campaign == null){
