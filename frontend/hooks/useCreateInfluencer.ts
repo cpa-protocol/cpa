@@ -1,10 +1,10 @@
 import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from "wagmi";
 import cpaABI from "@/abi/NFT";
-import { NftAddress } from "@/constants/Address"
+import { CpaAddress } from "@/constants/Address"
 
 const useCreateInfluencer = ( campaignId: number)=> {
     const { config } = usePrepareContractWrite({
-        address: NftAddress,
+        address: CpaAddress,
         abi: cpaABI,
         functionName: 'createInfluencer',
         args: [campaignId]
