@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {useEffect } from "react";
 import { useCampaignCreateCampaign } from "../../src/generated";
 import { parseEther } from "viem";
 import { useRouter } from 'next/router';
@@ -32,6 +31,7 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
+import useCreateCampaign from "@/hooks/useCreateCampaign";
 
 
 
@@ -84,6 +84,8 @@ const FormSchema = z
 
 function CampaignForm({onClose}){
   const router = useRouter();
+  const [campaignInput, setCampaignInput] = useState('')
+
   const { address, connector, isConnected } = useAccount();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -94,19 +96,21 @@ function CampaignForm({onClose}){
         form.setValue("GraphQL", url);
     };
     const audienceSize = watch("TargetAudienceSize");
-    const cpa = watch("Cpa");
+    const cpa = Number(watch('Cpa')??0);
     const graphQL = watch("GraphQL");
+    const campaignName =  watch('CampaignName')
+    const promoteAddress = watch('Address') 
+    const targetSize = Number(watch('TargetAudienceSize')??0)
+    const reward = cpa * targetSize
 
-    const {data} = useCampaignCreateCampaign({
-        address: '0x47625465f936920Efa00e33391125fCcfA106d84',
-        args: [audienceSize, cpa, graphQL]
-    });
-
+    // @ts-ignore
+    const { write, isLoading, isSuccess, data} = useCreateCampaign(campaignName,promoteAddress,reward, cpa,graphQL)
 
 
     const onSubmit = () => {
-      const { data, error, isError, write } = useContractWrite(config);
-        write?.();
+      if(write){
+        write()
+      }
     };
     return (
     <div className="w-full">
@@ -204,5 +208,3 @@ function AddBlockPopup({ onClose }) {
 }
 
 export default BlocksList;
-
-
