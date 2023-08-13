@@ -1,0 +1,41 @@
+.mint {
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #FFC812 0%, #FAB23D 100%);
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.dialog{
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    height: 31rem;
+    width: 27rem;
+}
+.btn {
+    border-radius: 5.625rem; 
+    color: white;
+    background: linear-gradient(129deg, #FFC812 0%, #FAB23D 100%);
+    border-color: #FFC812 !important; 
+    color: #FFF;
+    text-align: center;
+    font-family: Ubuntu;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    padding: 1rem 8rem;
+}
+.money {
+  width: 11rem;
+  height: 11rem;
+}
