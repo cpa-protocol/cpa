@@ -4,6 +4,9 @@ import { useState } from 'react';
 import {
   useAccount,
 } from "wagmi";
+import useWithdrawReward from '@/hooks/useWithdrawReward';
+
+import styles from './CollabDetailPopup.module.css'
 
 function CollabDetail({ collab, onClose }) {
   console.log(collab.id.toString())
@@ -15,6 +18,7 @@ function CollabDetail({ collab, onClose }) {
       : '';
 
   const { address, connector, isConnected } = useAccount();
+  const {write, isLoading} = useWithdrawReward(collab.id);
   const mintLink = `${origin}${asPath}/${address}@${collab.id.toString()}`;
   return (
     <div className="fixed inset-x-12 inset-y-20 z-50 flex items-center justify-center bg-white">
@@ -44,6 +48,11 @@ function CollabDetail({ collab, onClose }) {
                 </div>
                 <CopyableURL url={mintLink} />
                 {/* Add more details as needed */}
+                <button className={styles.btn} onClick={()=>{
+                  if(write){
+                    write()
+                  }
+                }}>{isLoading || !write ? 'Loading' : 'Withdraw'}</button>
         </div>
         </div>
       </div>
