@@ -1,19 +1,24 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import LogoIcon from '@/components/icons/LogoIcon'
-import { useMemo, useState } from 'react';
+import { useMemo, useState, Dispatch, SetStateAction } from 'react';
 import Link from 'next/link';
 import type { NextPage } from 'next';
 import { useAccount } from "wagmi";
 import Head from 'next/head';
 import { IDKitWidget } from '@worldcoin/idkit';
 import type { ISuccessResult } from "@worldcoin/idkit";
+import styles from './VerifyWorldId.module.css'
 
 const action = 'mint-collab-nft';
 const app_id= 'app_staging_7d739ad0b13ae36395a73a4c9e8fa198';
 
-function VerifyWorldId() {
+type VerifyWorldIdIdProps = {
+  verified: boolean;
+  setVerified:  Dispatch<SetStateAction<boolean>>
+}
+
+function VerifyWorldId({verified, setVerified}:VerifyWorldIdIdProps) {
   const { address, connector, isConnected } = useAccount();
-  const [verified, setVerified] = useState(false);
 
     const onSuccess= (data: ISuccessResult) => {
         console.log(data);
@@ -54,7 +59,7 @@ function VerifyWorldId() {
       {({ open }) => 
             <button
               onClick={open}
-              className="flex items-center gap-x-4 transition-all bg-white border border-gray-200 text-gray-900 h-12 px-6 rounded-xl cursor-pointer"
+              className={`${styles.verifyWorldId} flex items-center gap-x-4 transition-all bg-white border border-gray-200 text-gray-900 h-12 px-6 rounded-xl cursor-pointer`}
             >
               <LogoIcon />
               <span className="text-base leading-normal font-semibold">
