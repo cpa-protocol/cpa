@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCampaignCreateCampaign } from "../../src/generated";
+import useGetAllCampaigns from "@/hooks/useGetAllCampaigns";
+import useGetCampaignOwner from "@/hooks/useGetCampaignOwner";
 import { parseEther } from "viem";
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -33,20 +34,31 @@ import {
 } from "wagmi";
 import useCreateCampaign from "@/hooks/useCreateCampaign";
 
-
-
-function RoleBlock({role, description, image, link} : {role: string, description: string, image: string, link: string}){
+function MyCampaignDashboard() {
+    const {address, connector, isConnected} = useAccount();
+    const {data: campaigns, isLoading, isSuccess} = useGetAllCampaigns();
+    if (isSuccess) {
+        console.log(campaigns);
+        // Check the campaign's owner using useGetCampaignOwner
+        // only show the campaign which they're the owner
+        const myCampaigns = campaigns.filter((campaign) => {
+            console.log(campaign);
+            console.log(campaign.id);
+            const {data: owner, isLoading, isSuccess} = useGetCampaignOwner(campaign.id);
+            if (isSuccess) {
+                return owner === address;
+            }
+        });
     return (
-    <div className="flex flex-col relative rounded-3xl border-2 border-zinc-100 items-center">
-        <div className="text-center text-black text-3xl font-bold py-4">{role}</div>
-        <img className="w-1/2  h-1/2" src={image} />
-        <Link href={link}>
-            <div className=" px-7 py-2 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow justify-center items-center gap-2.5 inline-flex m-8">
-                <div className="text-center text-white text-xl font-bold">{description}</div>
+        <BlocksList blocks={myCampaigns} />
+    );
+    } else {
+        return (
+            <div>
+                <p> Loading... </p>
             </div>
-        </Link>
-    </div>
-    )
+        );
+    }
 }
 
 function BlocksList({ blocks }) {
@@ -56,9 +68,9 @@ function BlocksList({ blocks }) {
     <div className="grid grid-cols-3 gap-4">
       {blocks.map((block, index) => (
         <div key={index} className="border p-4 rounded-3xl">
-          <h3 className="font-bold">{block.title}</h3>
+          <h3 className="font-bold">{block.name}</h3>
           <p className="text-sm text-gray-600 mb-10">{block.createTime}</p>
-          <p className="">{block.claimed} / {block.totalSupply} claimed </p>
+          <p className="">{`${block.audience - block.reward / block.cpa}`} / {`${block.audience}`} claimed </p>
         </div>
       ))}
       <div
@@ -103,9 +115,9 @@ function CampaignForm({onClose}){
     const targetSize = Number(watch('TargetAudienceSize')??0)
     const reward = cpa * targetSize
 
+    // console.log(campaignName, promoteAddress, reward, cpa, graphQL)
     // @ts-ignore
-    const { write, isLoading, isSuccess, data} = useCreateCampaign(campaignName,promoteAddress,reward, cpa,graphQL)
-
+    const { write, isLoading, isSuccess, data} = useCreateCampaign(campaignName,promoteAddress,reward, cpa, graphQL)
 
     const onSubmit = () => {
       if(write){
@@ -152,7 +164,7 @@ function CampaignForm({onClose}){
                   <FormItem>
                     <FormLabel> Reward Per Acquisition </FormLabel>
                     <FormControl>
-                      <Input type="number" step="1" {...field} />
+                      <Input type="number" step="0.0001" {...field} />
                     </FormControl>
                     <FormDescription></FormDescription>
                     <FormMessage />
@@ -207,4 +219,5 @@ function AddBlockPopup({ onClose }) {
   );
 }
 
-export default BlocksList;
+export default MyCampaignDashboard;
+
