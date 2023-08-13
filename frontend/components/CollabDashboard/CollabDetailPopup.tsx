@@ -1,7 +1,21 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import {
+  useAccount,
+} from "wagmi";
 
 function CollabDetail({ collab, onClose }) {
+  console.log(collab.id.toString())
+  console.log(collab.reward / collab.cpa)
+  const { asPath } = useRouter();
+  const origin =
+    typeof window !== 'undefined' && window.location.origin
+      ? window.location.origin
+      : '';
+
+  const { address, connector, isConnected } = useAccount();
+  const mintLink = `${origin}${asPath}/${address}@${collab.id.toString()}`;
   return (
     <div className="fixed inset-x-12 inset-y-20 z-50 flex items-center justify-center bg-white">
       <div className="flex flex-col bg-white p-8 w-full h-full overflow-auto">
@@ -16,7 +30,7 @@ function CollabDetail({ collab, onClose }) {
                         Quota:
                     </div>
                     <div className="w-14 h-7 border rounded-3xl text-amber-400 text-base font-bold flex justify-center items-center">
-                      {collab.RemainQuota}
+                      {(collab.reward / collab.cpa).toString()}
                     </div>
                 </div>
 
@@ -28,7 +42,7 @@ function CollabDetail({ collab, onClose }) {
                       {collab.RewardPerAction} ETH
                     </div>
                 </div>
-                <CopyableURL url={collab.Link} />
+                <CopyableURL url={mintLink} />
                 {/* Add more details as needed */}
         </div>
         </div>
