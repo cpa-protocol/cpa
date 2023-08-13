@@ -1,12 +1,10 @@
 const config = {
   graphqlQuery: `
-    query($address: String!) {
-      swaps(orderBy: timestamp, orderDirection: desc, where: { sender: $address }) {
+      swaps(orderBy: timestamp, orderDirection: desc, where: { sender: "$address" }) {
         transaction {
           id
         }
       }
-    }
   `,
   apiEndpoint: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
   checkFunction: function(data) {
