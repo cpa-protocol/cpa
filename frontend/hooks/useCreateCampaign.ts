@@ -2,12 +2,18 @@ import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from
 import cpaABI from "@/abi/NFT";
 import { CpaAddress } from "@/constants/Address"
 
-const useCreateInfluencer = ( campaignId: number)=> {
+const useCreateCampaign = ( 
+    campaignName: string,
+    promoteAddress:`0x${string}`,
+    reward: number,
+    cpa: number,
+    query: string,
+)=> {
     const { config } = usePrepareContractWrite({
         address: CpaAddress,
         abi: cpaABI,
-        functionName: 'createInfluencer',
-        args: [campaignId]
+        functionName: 'createCampaign',
+        args: [campaignName, promoteAddress, reward, cpa, query]
     });
 
     const { write, data } = useContractWrite(config);
@@ -18,4 +24,4 @@ const useCreateInfluencer = ( campaignId: number)=> {
     return { write, isLoading, isSuccess, data}
 }
 
-export default useCreateInfluencer;
+export default useCreateCampaign;
