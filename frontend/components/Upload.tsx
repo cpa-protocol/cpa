@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import Button from '../ui/button';
+import React, { ChangeEvent, useState } from 'react';
+import {Button} from '@/components/ui/button';
 import { Web3Storage } from 'web3.storage';
 
-export default function Upload({ onUploadSuccess }) {
-  const [file, setFile] = useState(null);
+type UploadProps = {
+  onUploadSuccess: (url: string) => void;
+};
+
+export default function Upload({ onUploadSuccess }: UploadProps) {
+  const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [ipfsUrl, setIpfsUrl] = useState('');
 
-  const handleChange = (event) => {
-    setFile(event.target.files[0]);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files) {
+        setFile(event.target.files[0]);
+      } 
   };
 
   const handleUpload = async () => {
@@ -18,7 +24,7 @@ export default function Upload({ onUploadSuccess }) {
 
     setUploading(true);
 
-    const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY });
+    const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3_STORAGE_API_KEY || '' });
     const cid = await client.put([file]);
     const url = `https://dweb.link/ipfs/${cid}`;
 

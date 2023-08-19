@@ -1,3 +1,4 @@
+ // @ts-nocheck
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useState } from 'react';
 import { useRouter } from 'next/router';

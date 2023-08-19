@@ -8,7 +8,22 @@ import useWithdrawReward from '@/hooks/useWithdrawReward';
 
 import styles from './CollabDetailPopup.module.css'
 
-function CollabDetail({ collab, onClose }) {
+type Collab = {
+    id: number;
+    Title: string;
+    Description: string;
+    reward: number;
+    RewardPerAction: number;
+    cpa: number;
+    graphQL: string;
+    address: string;
+    audience: number;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+function CollabDetail({ collab, onClose }: { collab: Collab; onClose: () => void }) {
   console.log(collab.id.toString())
   console.log(collab.reward / collab.cpa)
   const { asPath } = useRouter();
@@ -60,7 +75,7 @@ function CollabDetail({ collab, onClose }) {
   );
 }
 
-function CopyableURL({ url }) {
+function CopyableURL({ url }: { url: string}) {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyClick = async () => {

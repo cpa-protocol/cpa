@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { defineConfig } from '@wagmi/cli'
 import { react } from '@wagmi/cli/plugins'
 import CampaignABI from './abi/Campaign.json'

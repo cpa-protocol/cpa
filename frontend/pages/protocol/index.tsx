@@ -34,7 +34,7 @@ const Protocol: NextPage = () => {
                   <div  className="text-3xl m-4">
                       Campaign Dashboard
                   </div>
-                  <MyCampaignDashboard suppressHydrationWarning />
+                  <MyCampaignDashboard />
                   </div>
               </>
           )

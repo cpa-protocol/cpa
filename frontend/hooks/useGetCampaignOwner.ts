@@ -2,7 +2,7 @@ import { useContractRead } from "wagmi";
 import cpaABI from "@/abi/CPA";
 import { CpaAddress } from "@/constants/Address"
 
-const useGetCampaignOwner = (tokenId)=> {
+const useGetCampaignOwner = (tokenId:number)=> {
     const { data, isLoading, isSuccess } = useContractRead({
         address: CpaAddress,
         abi: cpaABI,

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { zodResolver } from "@hookform/resolvers/zod";
 import {formatEther} from "viem";
 import useGetAllCampaigns from "@/hooks/useGetAllCampaigns";
@@ -12,9 +13,26 @@ import * as z from "zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import useSetUpNFT from '@/hooks/useSetUpNFT';
+type campaign = {
+    id: number;
+    name: string;
+    audience: number;
+    reward: number;
+    cpa: number;
+    graphQL: string;
+}
 
-const IssueCollabNFT = (props) => {
-    const {campaign, address, handleViewDetails}  = props
+type CollabListProps = {
+    blocks: campaign[];
+};
+
+type IssueCollabNFTProps = {
+    campaign: campaign;
+    address: `0x${string}`;
+    handleViewDetails: (collab: any) => void;
+};
+
+const IssueCollabNFT = ({campaign, address, handleViewDetails}:IssueCollabNFTProps) => {
     console.log(campaign);
     const { write, isLoading, isSuccess } = useSetUpNFT(Number(campaign.id.toString()), campaign.name, 'testurl');
     const { data,  isLoading:influencerIsLoading, } = useInfluencersNftContract(address, campaign.id);
@@ -44,15 +62,15 @@ const IssueCollabNFT = (props) => {
 };
 
 
-function CollabList({ blocks }) {
+function CollabList({ blocks }: CollabListProps) {
   const { address, connector, isConnected } = useAccount();
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedCollab, setSelectedCollab] = useState(null);
+  const [selectedCollab, setSelectedCollab] = useState<campaign | undefined >(undefined);
   const {data : campaigns, isLoading, isSuccess} = useGetAllCampaigns();
   console.log(`campaigns are ${campaigns}`);
 
   // console.log(useInfluencersNftContract(address, 1).data[2]);
-  const handleViewDetails = (collab) => {
+  const handleViewDetails = (collab:campaign) => {
     setSelectedCollab(collab);
     console.log(collab);
     setShowDetails(true);

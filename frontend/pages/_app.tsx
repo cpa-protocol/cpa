@@ -1,3 +1,4 @@
+// @ts-nocheck
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import Header from '../components/Header';

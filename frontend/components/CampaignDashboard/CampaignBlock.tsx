@@ -1,8 +1,9 @@
+// @ts-nocheck
 import { zodResolver } from "@hookform/resolvers/zod";
+import AddBlockPopup from "@/components/CampaignDashboard/BlockPopup";
 import useGetAllCampaigns from "@/hooks/useGetAllCampaigns";
 import useGetCampaignOwner from "@/hooks/useGetCampaignOwner";
 import { parseEther } from "viem";
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Upload from '../Upload';
 import Link from 'next/link';
@@ -10,29 +11,21 @@ import * as z from "zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import {
   useAccount,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
 import useCreateCampaign from "@/hooks/useCreateCampaign";
+
+type Campaign ={
+    id: string;
+    name: string;
+    audience: number;
+    reward: number;
+    cpa: number;
+    graphQL: string;
+}
 
 function MyCampaignDashboard() {
     const {address, connector, isConnected} = useAccount();
@@ -51,7 +44,7 @@ function MyCampaignDashboard() {
     }
 }
 
-function BlocksList({ blocks }) {
+function BlocksList({ blocks }: { blocks: Campaign[] }) {
   const [showPopup, setShowPopup] = useState(false);
 
   return (
@@ -70,7 +63,7 @@ function BlocksList({ blocks }) {
   );
 }
 
-function FilteredBlock({ block }) {
+function FilteredBlock({ block }: { block: Campaign }) {
   const [showPopup, setShowPopup] = useState(false);
   const {address, connector, isConnected} = useAccount();
   const {data:owner, isLoading, isSuccess} = useGetCampaignOwner(block.id);
@@ -84,138 +77,7 @@ function FilteredBlock({ block }) {
       }
 }
 
-const FormSchema = z
-  .object({
-    CampaignName: z.string(),
-    TargetAudienceSize: z.coerce.number(),
-    Cpa: z.coerce.number(),
-    Address: z.string(),
-    GraphQL: z.string()
-  });
-
-function CampaignForm({onClose}){
-  const router = useRouter();
-  const [campaignInput, setCampaignInput] = useState('')
-
-  const { address, connector, isConnected } = useAccount();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-  });
-    const {watch} = form;
-    const handleUploadSuccess = (url) => {
-        console.log(url);
-        form.setValue("GraphQL", url);
-    };
-    const audienceSize = watch("TargetAudienceSize");
-    const cpa = Number(watch('Cpa')??0);
-    const graphQL = watch("GraphQL");
-    const campaignName =  watch('CampaignName')
-    const promoteAddress = watch('Address') 
-    const targetSize = Number(watch('TargetAudienceSize')??0)
-    const reward = cpa * targetSize
-
-    // console.log(campaignName, promoteAddress, reward, cpa, graphQL)
-    // @ts-ignore
-    const { write, isLoading, isSuccess, data} = useCreateCampaign(campaignName,promoteAddress,reward, cpa, graphQL)
-
-    const onSubmit = () => {
-      if(write){
-        write()
-      }
-    };
-    return (
-    <div className="w-full">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="CampaignName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel> Campaign Name </FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} placeholder="CampaignName" />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex flex-row items-center w-full space-x-2">
-              <FormField
-                control={form.control}
-                name="TargetAudienceSize"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel> Target Audience Size </FormLabel>
-                    <FormControl>
-                      <Input type="number" step="10" {...field} />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="Cpa"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel> Reward Per Acquisition </FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.0001" {...field} />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="Address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel> Contract to promote </FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} placeholder="0x123..." />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Upload onUploadSuccess={handleUploadSuccess} />
-
-          <div className="flex flex-row items-center w-full space-x-2 justify-between">
-              <Button type="submit" className="mt-4">
-                Submit
-              </Button>
-              <Button type="button" className="mt-4" onClick={onClose}>
-                Cancel
-              </Button>
-          </div>
-        </form>
-      </Form>
-      <div>
-      </div>
-    </div>
-    )
 
 
-}
-
-
-function AddBlockPopup({ onClose }) {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-3xl shadow-lg">
-        <h2 className="text-xl font-bold mb-4">Create Campaign</h2>
-        <CampaignForm onClose={onClose}/>
-      </div>
-    </div>
-  );
-}
 
 export default MyCampaignDashboard;

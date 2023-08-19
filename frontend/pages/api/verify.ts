@@ -1,3 +1,5 @@
+import type { NextApiRequest, NextApiResponse } from "next";
+
 export type VerifyReply = {
   code: string;
   detail?: string;
