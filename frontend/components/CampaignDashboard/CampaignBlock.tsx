@@ -39,18 +39,8 @@ function MyCampaignDashboard() {
     const {data: campaigns, isLoading, isSuccess} = useGetAllCampaigns();
     if (isSuccess) {
         console.log(campaigns);
-        // Check the campaign's owner using useGetCampaignOwner
-        // only show the campaign which they're the owner
-        const myCampaigns = campaigns.filter((campaign) => {
-            console.log(campaign);
-            console.log(campaign.id);
-            const {data: owner, isLoading, isSuccess} = useGetCampaignOwner(campaign.id);
-            if (isSuccess) {
-                return owner === address;
-            }
-        });
     return (
-        <BlocksList blocks={myCampaigns} />
+        <BlocksList blocks={campaigns} />
     );
     } else {
         return (
@@ -67,16 +57,12 @@ function BlocksList({ blocks }) {
   return (
     <div className="grid grid-cols-3 gap-4">
       {blocks.map((block, index) => (
-        <div key={index} className="border p-4 rounded-3xl">
-          <h3 className="font-bold">{block.name}</h3>
-          <p className="text-sm text-gray-600 mb-10">{block.createTime}</p>
-          <p className="">{`${block.audience - block.reward / block.cpa}`} / {`${block.audience}`} claimed </p>
-        </div>
-      ))}
-      <div
+          <FilteredBlock block={block} key={index} />
+    ))}
+    <div
         className="border p-4 rounded-3xl text-gray-400 cursor-pointer text-center"
         onClick={() => setShowPopup(true)}
-      >
+     >
           Create New
       </div>
       {showPopup && <AddBlockPopup onClose={() => setShowPopup(false)} />}
@@ -84,6 +70,19 @@ function BlocksList({ blocks }) {
   );
 }
 
+function FilteredBlock({ block }) {
+  const [showPopup, setShowPopup] = useState(false);
+  const {address, connector, isConnected} = useAccount();
+  const {data:owner, isLoading, isSuccess} = useGetCampaignOwner(block.id);
+      if (owner == address) { 
+          return (
+            <div className="border p-4 rounded-3xl">
+              <h3 className="font-bold">{block.name}</h3>
+              <p className="text-sm text-gray-600 mb-10">{block.createTime}</p>
+              <p className="">{`${block.audience - block.reward / block.cpa}`} / {`${block.audience}`} claimed </p>
+      </div>)
+      }
+}
 
 const FormSchema = z
   .object({
@@ -220,4 +219,3 @@ function AddBlockPopup({ onClose }) {
 }
 
 export default MyCampaignDashboard;
-

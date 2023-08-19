@@ -19,7 +19,7 @@ function CollabDetail({ collab, onClose }) {
 
   const { address, connector, isConnected } = useAccount();
   const {write, isLoading} = useWithdrawReward(collab.id);
-  const mintLink = `${origin}${asPath}/${address}@${collab.id.toString()}`;
+    const mintLink = `${origin}/followers/${address}@${collab.id.toString()}`;
   return (
     <div className="fixed inset-x-12 inset-y-20 z-50 flex items-center justify-center bg-white">
       <div className="flex flex-col bg-white p-8 w-full h-full overflow-auto">

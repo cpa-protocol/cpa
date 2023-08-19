@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Link from 'next/link';
 
 function RoleBlock({role, description, image, link} : {role: string, description: string, image: string, link: string}){
@@ -32,7 +33,7 @@ export default function SelectRole(){
     return (
         <div className="flex flex-col items-center">
             <div className="flex flex-row gap-10">
-                {roles.map((role) => <RoleBlock {...role} />)}
+                {roles.map((role, index) => <RoleBlock key={index} {...role} />)}
             </div>
         </div>
     )
