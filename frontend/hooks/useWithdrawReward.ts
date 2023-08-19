@@ -1,5 +1,5 @@
 import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from "wagmi";
-import cpaABI from "@/abi/NFT";
+import cpaABI from "@/abi/CPA";
 import { CpaAddress } from "@/constants/Address"
 
 const useWithdrawReward = ( campaignId: number)=> {
