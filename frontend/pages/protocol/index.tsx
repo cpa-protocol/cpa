@@ -1,23 +1,20 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import BlocksList from '../../components/CampaignDashboard/CampaignBlock';
-import SelectRole from '../../components/SelectRole/SelectRole';
+import MyCampaignDashboard from '@/components/CampaignDashboard/CampaignBlock';
+import SelectRole from '@/components/SelectRole/SelectRole';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import type { NextPage } from 'next';
 import {
   useAccount,
 } from "wagmi";
 import Head from 'next/head';
-import styles from '../../styles/Home.module.css';
+import styles from '@/styles/Home.module.css';
 
 const Protocol: NextPage = () => {
   const { address, connector, isConnected } = useAccount();
-    const testBlocks = [
-        {
-            title: "Campaign 1",
-            createTime: "2023-08-01",
-            totalSupply: "100",
-            claimed: "99"
-        }]
-
+  const isMounted = useIsMounted();
+  if (!isMounted) {
+      return null;
+  }
   return (
       <>
       <main className={styles.main}>
@@ -37,7 +34,7 @@ const Protocol: NextPage = () => {
                   <div  className="text-3xl m-4">
                       Campaign Dashboard
                   </div>
-                  <BlocksList blocks={testBlocks} />
+                  <MyCampaignDashboard suppressHydrationWarning />
                   </div>
               </>
           )
