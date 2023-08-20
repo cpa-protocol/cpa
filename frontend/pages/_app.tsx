@@ -2,7 +2,7 @@
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import Header from '../components/Header';
-import { getDefaultWallets, RainbowKitProvider, lightTheme, Theme } from '@rainbow-me/rainbowkit';
+import { getDefaultWallets, RainbowKitProvider, lightTheme, Theme, Chain } from '@rainbow-me/rainbowkit';
 import type { AppProps } from 'next/app';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
@@ -15,6 +15,27 @@ import {
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
+const mode: Chain ={
+  id: 919,
+  name: 'Mode Testnet',
+  network: 'Mode Sepolia',
+  iconUrl: 'https://uploads-ssl.webflow.com/64c906a6ed3c4d809558853b/64ccf2a2a43cf00fd443a5f3_Layer_1-2.svg',
+  iconBackground: '#000',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Mode Testnet',
+    symbol: 'ETH',
+  },
+  rpcUrls: {
+     public: { http: ['https://sepolia.mode.network/'] },
+      default: { http: ['https://sepolia.mode.network/'] },
+  },
+  blockExplorers: {
+    default: { name: 'Explorer', url: 'https://sepolia.explorer.mode.network/' },
+  },
+  testnet: true,
+}
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
       // optimism,
@@ -23,6 +44,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
       baseGoerli,
       // zora,
       zoraTestnet,
+      mode,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [optimismGoerli] : []),
   ],
   [publicProvider()]
