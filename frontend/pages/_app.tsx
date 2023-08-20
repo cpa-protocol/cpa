@@ -38,13 +38,13 @@ const mode: Chain ={
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
+      mode,
       // optimism,
       optimismGoerli,
       // base,
       baseGoerli,
       // zora,
       zoraTestnet,
-      mode,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [optimismGoerli] : []),
   ],
   [publicProvider()]
