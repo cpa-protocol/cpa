@@ -38,9 +38,9 @@ const mode: Chain ={
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
-      mode,
       // optimism,
       optimismGoerli,
+      mode,
       // base,
       baseGoerli,
       // zora,
