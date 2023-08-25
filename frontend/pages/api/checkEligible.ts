@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { useState } from "react";
 import axios from "axios";
+import * as vm from "vm";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,13 +17,28 @@ export default async function handler(
   let config;
   try {
     const response = await axios.get(
-      `https://ipfs.io/ipfs/${configHash}/config.js`,
+      `https://ipfs.io/ipfs/bafybeibsnbhomblnce3umj6rnn32dtvcpmcptklcn74pf4r5phdxm6e7te/config.js`,
     );
-    config = response.data;
+
+    // Create a sandboxed environment to safely evaluate the JS content
+      const sandbox = {
+                module: {
+        exports: {}
+      }
+      };
+    vm.createContext(sandbox);
+    vm.runInContext(response.data, sandbox);
+
+    // Access the evaluated config object
+    config = sandbox.module.exports;
+
+    console.log(config.apiEndpoint);
+
   } catch (error) {
+      console.log(`config is ${config}`);
+      console.log(error);
     return res.status(400).json({ error: "Failed to fetch config from IPFS" });
   }
-  // res.status(200).json(config);
 
   const client = new ApolloClient({
     uri: config.apiEndpoint,
@@ -34,14 +49,19 @@ export default async function handler(
 
   for (const address of addresses) {
     try {
+      console.log(`address is ${address}`);
+      console.log(config.graphqlQuery.replace("$address", address));
       const { data } = await client.query({
-        query: gql(config.graphqlQuery.replace("$address", address)),
+        query: gql(`{${config.graphqlQuery.replace("$address", address)}}`),
         variables: { address },
       });
+        const checkResult = config.checkFunction(data);
+        console.log(data);
+        console.log(checkResult);
 
-      // if (config.checkFunction(data)) {
-      results.push(config.graphqlQuery);
-      // }
+      if (config.checkFunction(data)) {
+          results.push(address);
+      }
     } catch (error) {
       results.push({
         address,
