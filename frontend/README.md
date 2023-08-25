@@ -8,6 +8,7 @@ First, run the development server:
 yarn
 yarn dev
 ```
+
 ## TODO:
 
 - [] Landing page
@@ -15,7 +16,8 @@ yarn dev
 ### Protocols features
 
 - [] Add border solution to verify users:
-    - All function that could retrieve a list of address should be support
+
+  - All function that could retrieve a list of address should be support
 
 - [] Add a GPT interface for people who are not familiar with generating the code to retrieve the address list
 
@@ -24,7 +26,6 @@ yarn dev
 ### Influencer features
 
 - [] Add in customizable NFT tokenURL for the "collab NFT"
-
 
 ### Audience featuers
 

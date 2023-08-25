@@ -1,44 +1,38 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import MyCampaignDashboard from '@/components/CampaignDashboard/CampaignBlock';
-import SelectRole from '@/components/SelectRole/SelectRole';
-import { useIsMounted } from '@/hooks/useIsMounted';
-import type { NextPage } from 'next';
-import {
-  useAccount,
-} from "wagmi";
-import Head from 'next/head';
-import styles from '@/styles/Home.module.css';
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import MyCampaignDashboard from "@/components/CampaignDashboard/CampaignBlock";
+import SelectRole from "@/components/SelectRole/SelectRole";
+import { useIsMounted } from "@/hooks/useIsMounted";
+import type { NextPage } from "next";
+import { useAccount } from "wagmi";
+import Head from "next/head";
+import styles from "@/styles/Home.module.css";
 
 const Protocol: NextPage = () => {
   const { address, connector, isConnected } = useAccount();
   const isMounted = useIsMounted();
   if (!isMounted) {
-      return null;
+    return null;
   }
   return (
-      <>
+    <>
       <main className={styles.main}>
-      {
-          !isConnected ? (
-              <>
-              <div className="flex flex-col items-center">
-                  <div className="text-black text-4xl font-bold my-16">
-                      Connect to see your campaigns
-                  </div>
-                  <ConnectButton />
+        {!isConnected ? (
+          <>
+            <div className="flex flex-col items-center">
+              <div className="text-black text-4xl font-bold my-16">
+                Connect to see your campaigns
               </div>
-              </>
-          ) : (
-              <>
-                  <div className="flex flex-col justify-left">
-                  <div  className="text-3xl m-4">
-                      Campaign Dashboard
-                  </div>
-                  <MyCampaignDashboard />
-                  </div>
-              </>
-          )
-      }
+              <ConnectButton />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col justify-left">
+              <div className="text-3xl m-4">Campaign Dashboard</div>
+              <MyCampaignDashboard />
+            </div>
+          </>
+        )}
       </main>
     </>
   );

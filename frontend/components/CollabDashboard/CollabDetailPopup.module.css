@@ -1,15 +1,15 @@
 .btn {
-    border-radius: 5.625rem; 
-    color: white;
-    background: linear-gradient(129deg, #FFC812 0%, #FAB23D 100%);
-    border-color: #FFC812 !important; 
-    color: #FFF;
-    text-align: center;
-    font-family: Ubuntu;
-    font-size: 1rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    padding: 1rem 5rem;
-    margin-top: 1rem;
+  border-radius: 5.625rem;
+  color: white;
+  background: linear-gradient(129deg, #ffc812 0%, #fab23d 100%);
+  border-color: #ffc812 !important;
+  color: #fff;
+  text-align: center;
+  font-family: Ubuntu;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  padding: 1rem 5rem;
+  margin-top: 1rem;
 }

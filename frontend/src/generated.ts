@@ -8,12 +8,12 @@ import {
   UsePrepareContractWriteConfig,
   useContractEvent,
   UseContractEventConfig,
-} from 'wagmi'
+} from "wagmi";
 import {
   ReadContractResult,
   WriteContractMode,
   PrepareWriteContractResult,
-} from 'wagmi/actions'
+} from "wagmi/actions";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Campaign
@@ -21,241 +21,241 @@ import {
 
 export const campaignABI = [
   {
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-    inputs: [{ name: '_updater', internalType: 'address', type: 'address' }],
+    stateMutability: "nonpayable",
+    type: "constructor",
+    inputs: [{ name: "_updater", internalType: "address", type: "address" }],
   },
   {
-    type: 'event',
+    type: "event",
     anonymous: false,
     inputs: [
-      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: "id", internalType: "uint256", type: "uint256", indexed: true },
       {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
+        name: "owner",
+        internalType: "address",
+        type: "address",
         indexed: true,
       },
       {
-        name: 'reward',
-        internalType: 'int256',
-        type: 'int256',
+        name: "reward",
+        internalType: "int256",
+        type: "int256",
         indexed: false,
       },
-      { name: 'cpa', internalType: 'int256', type: 'int256', indexed: false },
-      { name: 'query', internalType: 'string', type: 'string', indexed: false },
+      { name: "cpa", internalType: "int256", type: "int256", indexed: false },
+      { name: "query", internalType: "string", type: "string", indexed: false },
     ],
-    name: 'CreateCampaign',
+    name: "CreateCampaign",
   },
   {
-    type: 'event',
+    type: "event",
     anonymous: false,
     inputs: [
       {
-        name: 'campaignId',
-        internalType: 'uint256',
-        type: 'uint256',
+        name: "campaignId",
+        internalType: "uint256",
+        type: "uint256",
         indexed: true,
       },
       {
-        name: 'tokenId',
-        internalType: 'uint256',
-        type: 'uint256',
+        name: "tokenId",
+        internalType: "uint256",
+        type: "uint256",
         indexed: true,
       },
       {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'CreateInfluencer',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'campaignId',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: true,
-      },
-      { name: 'nft', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
+        name: "owner",
+        internalType: "address",
+        type: "address",
         indexed: true,
       },
     ],
-    name: 'CreateNFT',
+    name: "CreateInfluencer",
   },
   {
-    type: 'event',
+    type: "event",
     anonymous: false,
     inputs: [
       {
-        name: 'oldOwner',
-        internalType: 'address',
-        type: 'address',
+        name: "campaignId",
+        internalType: "uint256",
+        type: "uint256",
         indexed: true,
       },
+      { name: "nft", internalType: "address", type: "address", indexed: true },
       {
-        name: 'newOwner',
-        internalType: 'address',
-        type: 'address',
+        name: "owner",
+        internalType: "address",
+        type: "address",
         indexed: true,
       },
     ],
-    name: 'OwnerSet',
+    name: "CreateNFT",
   },
   {
-    type: 'event',
+    type: "event",
     anonymous: false,
     inputs: [
       {
-        name: 'campaignId',
-        internalType: 'uint256',
-        type: 'uint256',
+        name: "oldOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "newOwner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "OwnerSet",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "campaignId",
+        internalType: "uint256",
+        type: "uint256",
         indexed: false,
       },
       {
-        name: 'influencer',
-        internalType: 'address',
-        type: 'address',
+        name: "influencer",
+        internalType: "address",
+        type: "address",
         indexed: false,
       },
-      { name: 'click', internalType: 'int256', type: 'int256', indexed: false },
+      { name: "click", internalType: "int256", type: "int256", indexed: false },
     ],
-    name: 'UpdateInfluencer',
+    name: "UpdateInfluencer",
   },
   {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: '', internalType: 'address', type: 'address' }],
-    name: 'campaigns',
+    stateMutability: "view",
+    type: "function",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "campaigns",
     outputs: [
-      { name: 'id', internalType: 'uint256', type: 'uint256' },
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'nft', internalType: 'address', type: 'address' },
-      { name: 'reward', internalType: 'int256', type: 'int256' },
-      { name: 'cpa', internalType: 'int256', type: 'int256' },
-      { name: 'audience', internalType: 'int256', type: 'int256' },
-      { name: 'query', internalType: 'string', type: 'string' },
+      { name: "id", internalType: "uint256", type: "uint256" },
+      { name: "account", internalType: "address", type: "address" },
+      { name: "nft", internalType: "address", type: "address" },
+      { name: "reward", internalType: "int256", type: "int256" },
+      { name: "cpa", internalType: "int256", type: "int256" },
+      { name: "audience", internalType: "int256", type: "int256" },
+      { name: "query", internalType: "string", type: "string" },
     ],
   },
   {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'campaignsOwner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: "view",
+    type: "function",
+    inputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    name: "campaignsOwner",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
   },
   {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
-    name: 'changeOwner',
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [{ name: "newOwner", internalType: "address", type: "address" }],
+    name: "changeOwner",
     outputs: [],
   },
   {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: '_updater', internalType: 'address', type: 'address' }],
-    name: 'changeUpdater',
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [{ name: "_updater", internalType: "address", type: "address" }],
+    name: "changeUpdater",
     outputs: [],
   },
   {
-    stateMutability: 'payable',
-    type: 'function',
+    stateMutability: "payable",
+    type: "function",
     inputs: [
-      { name: 'reward', internalType: 'int256', type: 'int256' },
-      { name: 'cpa', internalType: 'int256', type: 'int256' },
-      { name: 'query', internalType: 'string', type: 'string' },
+      { name: "reward", internalType: "int256", type: "int256" },
+      { name: "cpa", internalType: "int256", type: "int256" },
+      { name: "query", internalType: "string", type: "string" },
     ],
-    name: 'createCampaign',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    name: "createCampaign",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
   },
   {
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
     inputs: [
-      { name: 'campaignId', internalType: 'uint256', type: 'uint256' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: "campaignId", internalType: "uint256", type: "uint256" },
+      { name: "tokenId", internalType: "uint256", type: "uint256" },
     ],
-    name: 'createInfluencer',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    name: "createInfluencer",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
   },
   {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'nft', internalType: 'address', type: 'address' }],
-    name: 'createNFT',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [{ name: "nft", internalType: "address", type: "address" }],
+    name: "createNFT",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
   },
   {
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
     inputs: [],
-    name: 'getBalance',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: "getBalance",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
   },
   {
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
     inputs: [],
-    name: 'getOwner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    name: "getOwner",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
   },
   {
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
     inputs: [],
-    name: 'getUpdater',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    name: "getUpdater",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
   },
   {
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
     inputs: [
-      { name: '', internalType: 'uint256', type: 'uint256' },
-      { name: '', internalType: 'address', type: 'address' },
+      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "", internalType: "address", type: "address" },
     ],
-    name: 'influencers',
+    name: "influencers",
     outputs: [
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-      { name: 'click', internalType: 'int256', type: 'int256' },
-      { name: 'reward', internalType: 'int256', type: 'int256' },
+      { name: "tokenId", internalType: "uint256", type: "uint256" },
+      { name: "click", internalType: "int256", type: "int256" },
+      { name: "reward", internalType: "int256", type: "int256" },
     ],
   },
   {
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
     inputs: [],
-    name: 'totalCampaignAmount',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: "totalCampaignAmount",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
   },
   {
-    stateMutability: 'nonpayable',
-    type: 'function',
+    stateMutability: "nonpayable",
+    type: "function",
     inputs: [
-      { name: 'campaignId', internalType: 'uint256', type: 'uint256' },
-      { name: 'influencerOwner', internalType: 'address', type: 'address' },
-      { name: 'click', internalType: 'int256', type: 'int256' },
+      { name: "campaignId", internalType: "uint256", type: "uint256" },
+      { name: "influencerOwner", internalType: "address", type: "address" },
+      { name: "click", internalType: "int256", type: "int256" },
     ],
-    name: 'updateInfluencer',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    name: "updateInfluencer",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
   },
   {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'campaignId', internalType: 'uint256', type: 'uint256' }],
-    name: 'withdrawReward',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: "nonpayable",
+    type: "function",
+    inputs: [{ name: "campaignId", internalType: "uint256", type: "uint256" }],
+    name: "withdrawReward",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -270,146 +270,146 @@ export function useCampaignRead<
 >(
   config: Omit<
     UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>,
-    'abi'
+    "abi"
   > = {} as any,
 ) {
   return useContractRead({
     abi: campaignABI,
     ...config,
-  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>);
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link campaignABI}__ and `functionName` set to `"campaigns"`.
  */
 export function useCampaignCampaigns<
-  TFunctionName extends 'campaigns',
+  TFunctionName extends "campaigns",
   TSelectData = ReadContractResult<typeof campaignABI, TFunctionName>,
 >(
   config: Omit<
     UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return useContractRead({
     abi: campaignABI,
-    functionName: 'campaigns',
+    functionName: "campaigns",
     ...config,
-  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>);
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link campaignABI}__ and `functionName` set to `"campaignsOwner"`.
  */
 export function useCampaignCampaignsOwner<
-  TFunctionName extends 'campaignsOwner',
+  TFunctionName extends "campaignsOwner",
   TSelectData = ReadContractResult<typeof campaignABI, TFunctionName>,
 >(
   config: Omit<
     UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return useContractRead({
     abi: campaignABI,
-    functionName: 'campaignsOwner',
+    functionName: "campaignsOwner",
     ...config,
-  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>);
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link campaignABI}__ and `functionName` set to `"getBalance"`.
  */
 export function useCampaignGetBalance<
-  TFunctionName extends 'getBalance',
+  TFunctionName extends "getBalance",
   TSelectData = ReadContractResult<typeof campaignABI, TFunctionName>,
 >(
   config: Omit<
     UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return useContractRead({
     abi: campaignABI,
-    functionName: 'getBalance',
+    functionName: "getBalance",
     ...config,
-  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>);
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link campaignABI}__ and `functionName` set to `"getOwner"`.
  */
 export function useCampaignGetOwner<
-  TFunctionName extends 'getOwner',
+  TFunctionName extends "getOwner",
   TSelectData = ReadContractResult<typeof campaignABI, TFunctionName>,
 >(
   config: Omit<
     UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return useContractRead({
     abi: campaignABI,
-    functionName: 'getOwner',
+    functionName: "getOwner",
     ...config,
-  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>);
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link campaignABI}__ and `functionName` set to `"getUpdater"`.
  */
 export function useCampaignGetUpdater<
-  TFunctionName extends 'getUpdater',
+  TFunctionName extends "getUpdater",
   TSelectData = ReadContractResult<typeof campaignABI, TFunctionName>,
 >(
   config: Omit<
     UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return useContractRead({
     abi: campaignABI,
-    functionName: 'getUpdater',
+    functionName: "getUpdater",
     ...config,
-  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>);
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link campaignABI}__ and `functionName` set to `"influencers"`.
  */
 export function useCampaignInfluencers<
-  TFunctionName extends 'influencers',
+  TFunctionName extends "influencers",
   TSelectData = ReadContractResult<typeof campaignABI, TFunctionName>,
 >(
   config: Omit<
     UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return useContractRead({
     abi: campaignABI,
-    functionName: 'influencers',
+    functionName: "influencers",
     ...config,
-  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>);
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link campaignABI}__ and `functionName` set to `"totalCampaignAmount"`.
  */
 export function useCampaignTotalCampaignAmount<
-  TFunctionName extends 'totalCampaignAmount',
+  TFunctionName extends "totalCampaignAmount",
   TSelectData = ReadContractResult<typeof campaignABI, TFunctionName>,
 >(
   config: Omit<
     UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>,
-    'abi' | 'functionName'
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return useContractRead({
     abi: campaignABI,
-    functionName: 'totalCampaignAmount',
+    functionName: "totalCampaignAmount",
     ...config,
-  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>)
+  } as UseContractReadConfig<typeof campaignABI, TFunctionName, TSelectData>);
 }
 
 /**
@@ -419,23 +419,23 @@ export function useCampaignWrite<
   TFunctionName extends string,
   TMode extends WriteContractMode = undefined,
 >(
-  config: TMode extends 'prepared'
+  config: TMode extends "prepared"
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
           typeof campaignABI,
           string
-        >['request']['abi'],
+        >["request"]["abi"],
         TFunctionName,
         TMode
       >
     : UseContractWriteConfig<typeof campaignABI, TFunctionName, TMode> & {
-        abi?: never
+        abi?: never;
       } = {} as any,
 ) {
   return useContractWrite<typeof campaignABI, TFunctionName, TMode>({
     abi: campaignABI,
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -444,25 +444,25 @@ export function useCampaignWrite<
 export function useCampaignChangeOwner<
   TMode extends WriteContractMode = undefined,
 >(
-  config: TMode extends 'prepared'
+  config: TMode extends "prepared"
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
           typeof campaignABI,
-          'changeOwner'
-        >['request']['abi'],
-        'changeOwner',
+          "changeOwner"
+        >["request"]["abi"],
+        "changeOwner",
         TMode
-      > & { functionName?: 'changeOwner' }
-    : UseContractWriteConfig<typeof campaignABI, 'changeOwner', TMode> & {
-        abi?: never
-        functionName?: 'changeOwner'
+      > & { functionName?: "changeOwner" }
+    : UseContractWriteConfig<typeof campaignABI, "changeOwner", TMode> & {
+        abi?: never;
+        functionName?: "changeOwner";
       } = {} as any,
 ) {
-  return useContractWrite<typeof campaignABI, 'changeOwner', TMode>({
+  return useContractWrite<typeof campaignABI, "changeOwner", TMode>({
     abi: campaignABI,
-    functionName: 'changeOwner',
+    functionName: "changeOwner",
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -471,25 +471,25 @@ export function useCampaignChangeOwner<
 export function useCampaignChangeUpdater<
   TMode extends WriteContractMode = undefined,
 >(
-  config: TMode extends 'prepared'
+  config: TMode extends "prepared"
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
           typeof campaignABI,
-          'changeUpdater'
-        >['request']['abi'],
-        'changeUpdater',
+          "changeUpdater"
+        >["request"]["abi"],
+        "changeUpdater",
         TMode
-      > & { functionName?: 'changeUpdater' }
-    : UseContractWriteConfig<typeof campaignABI, 'changeUpdater', TMode> & {
-        abi?: never
-        functionName?: 'changeUpdater'
+      > & { functionName?: "changeUpdater" }
+    : UseContractWriteConfig<typeof campaignABI, "changeUpdater", TMode> & {
+        abi?: never;
+        functionName?: "changeUpdater";
       } = {} as any,
 ) {
-  return useContractWrite<typeof campaignABI, 'changeUpdater', TMode>({
+  return useContractWrite<typeof campaignABI, "changeUpdater", TMode>({
     abi: campaignABI,
-    functionName: 'changeUpdater',
+    functionName: "changeUpdater",
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -498,25 +498,25 @@ export function useCampaignChangeUpdater<
 export function useCampaignCreateCampaign<
   TMode extends WriteContractMode = undefined,
 >(
-  config: TMode extends 'prepared'
+  config: TMode extends "prepared"
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
           typeof campaignABI,
-          'createCampaign'
-        >['request']['abi'],
-        'createCampaign',
+          "createCampaign"
+        >["request"]["abi"],
+        "createCampaign",
         TMode
-      > & { functionName?: 'createCampaign' }
-    : UseContractWriteConfig<typeof campaignABI, 'createCampaign', TMode> & {
-        abi?: never
-        functionName?: 'createCampaign'
+      > & { functionName?: "createCampaign" }
+    : UseContractWriteConfig<typeof campaignABI, "createCampaign", TMode> & {
+        abi?: never;
+        functionName?: "createCampaign";
       } = {} as any,
 ) {
-  return useContractWrite<typeof campaignABI, 'createCampaign', TMode>({
+  return useContractWrite<typeof campaignABI, "createCampaign", TMode>({
     abi: campaignABI,
-    functionName: 'createCampaign',
+    functionName: "createCampaign",
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -525,25 +525,25 @@ export function useCampaignCreateCampaign<
 export function useCampaignCreateInfluencer<
   TMode extends WriteContractMode = undefined,
 >(
-  config: TMode extends 'prepared'
+  config: TMode extends "prepared"
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
           typeof campaignABI,
-          'createInfluencer'
-        >['request']['abi'],
-        'createInfluencer',
+          "createInfluencer"
+        >["request"]["abi"],
+        "createInfluencer",
         TMode
-      > & { functionName?: 'createInfluencer' }
-    : UseContractWriteConfig<typeof campaignABI, 'createInfluencer', TMode> & {
-        abi?: never
-        functionName?: 'createInfluencer'
+      > & { functionName?: "createInfluencer" }
+    : UseContractWriteConfig<typeof campaignABI, "createInfluencer", TMode> & {
+        abi?: never;
+        functionName?: "createInfluencer";
       } = {} as any,
 ) {
-  return useContractWrite<typeof campaignABI, 'createInfluencer', TMode>({
+  return useContractWrite<typeof campaignABI, "createInfluencer", TMode>({
     abi: campaignABI,
-    functionName: 'createInfluencer',
+    functionName: "createInfluencer",
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -552,25 +552,25 @@ export function useCampaignCreateInfluencer<
 export function useCampaignCreateNft<
   TMode extends WriteContractMode = undefined,
 >(
-  config: TMode extends 'prepared'
+  config: TMode extends "prepared"
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
           typeof campaignABI,
-          'createNFT'
-        >['request']['abi'],
-        'createNFT',
+          "createNFT"
+        >["request"]["abi"],
+        "createNFT",
         TMode
-      > & { functionName?: 'createNFT' }
-    : UseContractWriteConfig<typeof campaignABI, 'createNFT', TMode> & {
-        abi?: never
-        functionName?: 'createNFT'
+      > & { functionName?: "createNFT" }
+    : UseContractWriteConfig<typeof campaignABI, "createNFT", TMode> & {
+        abi?: never;
+        functionName?: "createNFT";
       } = {} as any,
 ) {
-  return useContractWrite<typeof campaignABI, 'createNFT', TMode>({
+  return useContractWrite<typeof campaignABI, "createNFT", TMode>({
     abi: campaignABI,
-    functionName: 'createNFT',
+    functionName: "createNFT",
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -579,25 +579,25 @@ export function useCampaignCreateNft<
 export function useCampaignUpdateInfluencer<
   TMode extends WriteContractMode = undefined,
 >(
-  config: TMode extends 'prepared'
+  config: TMode extends "prepared"
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
           typeof campaignABI,
-          'updateInfluencer'
-        >['request']['abi'],
-        'updateInfluencer',
+          "updateInfluencer"
+        >["request"]["abi"],
+        "updateInfluencer",
         TMode
-      > & { functionName?: 'updateInfluencer' }
-    : UseContractWriteConfig<typeof campaignABI, 'updateInfluencer', TMode> & {
-        abi?: never
-        functionName?: 'updateInfluencer'
+      > & { functionName?: "updateInfluencer" }
+    : UseContractWriteConfig<typeof campaignABI, "updateInfluencer", TMode> & {
+        abi?: never;
+        functionName?: "updateInfluencer";
       } = {} as any,
 ) {
-  return useContractWrite<typeof campaignABI, 'updateInfluencer', TMode>({
+  return useContractWrite<typeof campaignABI, "updateInfluencer", TMode>({
     abi: campaignABI,
-    functionName: 'updateInfluencer',
+    functionName: "updateInfluencer",
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -606,25 +606,25 @@ export function useCampaignUpdateInfluencer<
 export function useCampaignWithdrawReward<
   TMode extends WriteContractMode = undefined,
 >(
-  config: TMode extends 'prepared'
+  config: TMode extends "prepared"
     ? UseContractWriteConfig<
         PrepareWriteContractResult<
           typeof campaignABI,
-          'withdrawReward'
-        >['request']['abi'],
-        'withdrawReward',
+          "withdrawReward"
+        >["request"]["abi"],
+        "withdrawReward",
         TMode
-      > & { functionName?: 'withdrawReward' }
-    : UseContractWriteConfig<typeof campaignABI, 'withdrawReward', TMode> & {
-        abi?: never
-        functionName?: 'withdrawReward'
+      > & { functionName?: "withdrawReward" }
+    : UseContractWriteConfig<typeof campaignABI, "withdrawReward", TMode> & {
+        abi?: never;
+        functionName?: "withdrawReward";
       } = {} as any,
 ) {
-  return useContractWrite<typeof campaignABI, 'withdrawReward', TMode>({
+  return useContractWrite<typeof campaignABI, "withdrawReward", TMode>({
     abi: campaignABI,
-    functionName: 'withdrawReward',
+    functionName: "withdrawReward",
     ...config,
-  } as any)
+  } as any);
 }
 
 /**
@@ -633,13 +633,13 @@ export function useCampaignWithdrawReward<
 export function usePrepareCampaignWrite<TFunctionName extends string>(
   config: Omit<
     UsePrepareContractWriteConfig<typeof campaignABI, TFunctionName>,
-    'abi'
+    "abi"
   > = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: campaignABI,
     ...config,
-  } as UsePrepareContractWriteConfig<typeof campaignABI, TFunctionName>)
+  } as UsePrepareContractWriteConfig<typeof campaignABI, TFunctionName>);
 }
 
 /**
@@ -647,15 +647,15 @@ export function usePrepareCampaignWrite<TFunctionName extends string>(
  */
 export function usePrepareCampaignChangeOwner(
   config: Omit<
-    UsePrepareContractWriteConfig<typeof campaignABI, 'changeOwner'>,
-    'abi' | 'functionName'
+    UsePrepareContractWriteConfig<typeof campaignABI, "changeOwner">,
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: campaignABI,
-    functionName: 'changeOwner',
+    functionName: "changeOwner",
     ...config,
-  } as UsePrepareContractWriteConfig<typeof campaignABI, 'changeOwner'>)
+  } as UsePrepareContractWriteConfig<typeof campaignABI, "changeOwner">);
 }
 
 /**
@@ -663,15 +663,15 @@ export function usePrepareCampaignChangeOwner(
  */
 export function usePrepareCampaignChangeUpdater(
   config: Omit<
-    UsePrepareContractWriteConfig<typeof campaignABI, 'changeUpdater'>,
-    'abi' | 'functionName'
+    UsePrepareContractWriteConfig<typeof campaignABI, "changeUpdater">,
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: campaignABI,
-    functionName: 'changeUpdater',
+    functionName: "changeUpdater",
     ...config,
-  } as UsePrepareContractWriteConfig<typeof campaignABI, 'changeUpdater'>)
+  } as UsePrepareContractWriteConfig<typeof campaignABI, "changeUpdater">);
 }
 
 /**
@@ -679,15 +679,15 @@ export function usePrepareCampaignChangeUpdater(
  */
 export function usePrepareCampaignCreateCampaign(
   config: Omit<
-    UsePrepareContractWriteConfig<typeof campaignABI, 'createCampaign'>,
-    'abi' | 'functionName'
+    UsePrepareContractWriteConfig<typeof campaignABI, "createCampaign">,
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: campaignABI,
-    functionName: 'createCampaign',
+    functionName: "createCampaign",
     ...config,
-  } as UsePrepareContractWriteConfig<typeof campaignABI, 'createCampaign'>)
+  } as UsePrepareContractWriteConfig<typeof campaignABI, "createCampaign">);
 }
 
 /**
@@ -695,15 +695,15 @@ export function usePrepareCampaignCreateCampaign(
  */
 export function usePrepareCampaignCreateInfluencer(
   config: Omit<
-    UsePrepareContractWriteConfig<typeof campaignABI, 'createInfluencer'>,
-    'abi' | 'functionName'
+    UsePrepareContractWriteConfig<typeof campaignABI, "createInfluencer">,
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: campaignABI,
-    functionName: 'createInfluencer',
+    functionName: "createInfluencer",
     ...config,
-  } as UsePrepareContractWriteConfig<typeof campaignABI, 'createInfluencer'>)
+  } as UsePrepareContractWriteConfig<typeof campaignABI, "createInfluencer">);
 }
 
 /**
@@ -711,15 +711,15 @@ export function usePrepareCampaignCreateInfluencer(
  */
 export function usePrepareCampaignCreateNft(
   config: Omit<
-    UsePrepareContractWriteConfig<typeof campaignABI, 'createNFT'>,
-    'abi' | 'functionName'
+    UsePrepareContractWriteConfig<typeof campaignABI, "createNFT">,
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: campaignABI,
-    functionName: 'createNFT',
+    functionName: "createNFT",
     ...config,
-  } as UsePrepareContractWriteConfig<typeof campaignABI, 'createNFT'>)
+  } as UsePrepareContractWriteConfig<typeof campaignABI, "createNFT">);
 }
 
 /**
@@ -727,15 +727,15 @@ export function usePrepareCampaignCreateNft(
  */
 export function usePrepareCampaignUpdateInfluencer(
   config: Omit<
-    UsePrepareContractWriteConfig<typeof campaignABI, 'updateInfluencer'>,
-    'abi' | 'functionName'
+    UsePrepareContractWriteConfig<typeof campaignABI, "updateInfluencer">,
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: campaignABI,
-    functionName: 'updateInfluencer',
+    functionName: "updateInfluencer",
     ...config,
-  } as UsePrepareContractWriteConfig<typeof campaignABI, 'updateInfluencer'>)
+  } as UsePrepareContractWriteConfig<typeof campaignABI, "updateInfluencer">);
 }
 
 /**
@@ -743,15 +743,15 @@ export function usePrepareCampaignUpdateInfluencer(
  */
 export function usePrepareCampaignWithdrawReward(
   config: Omit<
-    UsePrepareContractWriteConfig<typeof campaignABI, 'withdrawReward'>,
-    'abi' | 'functionName'
+    UsePrepareContractWriteConfig<typeof campaignABI, "withdrawReward">,
+    "abi" | "functionName"
   > = {} as any,
 ) {
   return usePrepareContractWrite({
     abi: campaignABI,
-    functionName: 'withdrawReward',
+    functionName: "withdrawReward",
     ...config,
-  } as UsePrepareContractWriteConfig<typeof campaignABI, 'withdrawReward'>)
+  } as UsePrepareContractWriteConfig<typeof campaignABI, "withdrawReward">);
 }
 
 /**
@@ -760,13 +760,13 @@ export function usePrepareCampaignWithdrawReward(
 export function useCampaignEvent<TEventName extends string>(
   config: Omit<
     UseContractEventConfig<typeof campaignABI, TEventName>,
-    'abi'
+    "abi"
   > = {} as any,
 ) {
   return useContractEvent({
     abi: campaignABI,
     ...config,
-  } as UseContractEventConfig<typeof campaignABI, TEventName>)
+  } as UseContractEventConfig<typeof campaignABI, TEventName>);
 }
 
 /**
@@ -774,15 +774,15 @@ export function useCampaignEvent<TEventName extends string>(
  */
 export function useCampaignCreateCampaignEvent(
   config: Omit<
-    UseContractEventConfig<typeof campaignABI, 'CreateCampaign'>,
-    'abi' | 'eventName'
+    UseContractEventConfig<typeof campaignABI, "CreateCampaign">,
+    "abi" | "eventName"
   > = {} as any,
 ) {
   return useContractEvent({
     abi: campaignABI,
-    eventName: 'CreateCampaign',
+    eventName: "CreateCampaign",
     ...config,
-  } as UseContractEventConfig<typeof campaignABI, 'CreateCampaign'>)
+  } as UseContractEventConfig<typeof campaignABI, "CreateCampaign">);
 }
 
 /**
@@ -790,15 +790,15 @@ export function useCampaignCreateCampaignEvent(
  */
 export function useCampaignCreateInfluencerEvent(
   config: Omit<
-    UseContractEventConfig<typeof campaignABI, 'CreateInfluencer'>,
-    'abi' | 'eventName'
+    UseContractEventConfig<typeof campaignABI, "CreateInfluencer">,
+    "abi" | "eventName"
   > = {} as any,
 ) {
   return useContractEvent({
     abi: campaignABI,
-    eventName: 'CreateInfluencer',
+    eventName: "CreateInfluencer",
     ...config,
-  } as UseContractEventConfig<typeof campaignABI, 'CreateInfluencer'>)
+  } as UseContractEventConfig<typeof campaignABI, "CreateInfluencer">);
 }
 
 /**
@@ -806,15 +806,15 @@ export function useCampaignCreateInfluencerEvent(
  */
 export function useCampaignCreateNftEvent(
   config: Omit<
-    UseContractEventConfig<typeof campaignABI, 'CreateNFT'>,
-    'abi' | 'eventName'
+    UseContractEventConfig<typeof campaignABI, "CreateNFT">,
+    "abi" | "eventName"
   > = {} as any,
 ) {
   return useContractEvent({
     abi: campaignABI,
-    eventName: 'CreateNFT',
+    eventName: "CreateNFT",
     ...config,
-  } as UseContractEventConfig<typeof campaignABI, 'CreateNFT'>)
+  } as UseContractEventConfig<typeof campaignABI, "CreateNFT">);
 }
 
 /**
@@ -822,15 +822,15 @@ export function useCampaignCreateNftEvent(
  */
 export function useCampaignOwnerSetEvent(
   config: Omit<
-    UseContractEventConfig<typeof campaignABI, 'OwnerSet'>,
-    'abi' | 'eventName'
+    UseContractEventConfig<typeof campaignABI, "OwnerSet">,
+    "abi" | "eventName"
   > = {} as any,
 ) {
   return useContractEvent({
     abi: campaignABI,
-    eventName: 'OwnerSet',
+    eventName: "OwnerSet",
     ...config,
-  } as UseContractEventConfig<typeof campaignABI, 'OwnerSet'>)
+  } as UseContractEventConfig<typeof campaignABI, "OwnerSet">);
 }
 
 /**
@@ -838,13 +838,13 @@ export function useCampaignOwnerSetEvent(
  */
 export function useCampaignUpdateInfluencerEvent(
   config: Omit<
-    UseContractEventConfig<typeof campaignABI, 'UpdateInfluencer'>,
-    'abi' | 'eventName'
+    UseContractEventConfig<typeof campaignABI, "UpdateInfluencer">,
+    "abi" | "eventName"
   > = {} as any,
 ) {
   return useContractEvent({
     abi: campaignABI,
-    eventName: 'UpdateInfluencer',
+    eventName: "UpdateInfluencer",
     ...config,
-  } as UseContractEventConfig<typeof campaignABI, 'UpdateInfluencer'>)
+  } as UseContractEventConfig<typeof campaignABI, "UpdateInfluencer">);
 }
