@@ -43,10 +43,13 @@ type IssueCollabNFTProps = {
 };
 
 const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
+
+  const [tokenUrl, setTokenUrl] = useState("");
+
   const { write: setUpNFT, isLoading: setupNFTIsLoading } = useSetUpNFT(
     Number(campaign.id.toString()),
     campaign.name,
-    "testurl",
+    tokenUrl,
   );
   const { data, isLoading: influencerIsLoading } = useInfluencersNftContract(
     address,
@@ -59,9 +62,14 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
 
   const { write: withdrawReward, isLoading } = useWithdrawReward(campaign.id);
 
+  const handleUploadSuccess = (url: string) => {
+    console.log(url);
+    setTokenUrl(url);
+  };
+
   const onSubmit = () => {
-    if (write) {
-      write();
+    if (setUpNFT) {
+      setUpNFT();
     }
   };
   const mintLink = `${origin}/followers/${address}@${campaign.id.toString()}`;
@@ -69,7 +77,15 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
   return (
     <Dialog>
       <DialogTrigger>
-        {isLoading ? "Loading" : contractExist ? "Issue Collab NFT" : "View Details"}
+          {setupNFTIsLoading ? "Loading" : contractExist ? (
+              <Button>
+                  Issue Collab NFT
+              </Button>
+          ): (
+              <Button>
+              View Details
+              </Button>
+          )}
       </DialogTrigger>
       {!contractExist && (
         <DialogContent>
@@ -107,6 +123,31 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
           </div>
         </DialogContent>
       )}
+
+      {contractExist && (
+        <DialogContent>
+          <DialogHeader>
+            <h3 className="font-bold text-xl">{campaign.name}</h3>
+          </DialogHeader>
+          <div className="mt-4 ml-4 mb-4">
+              <div className="flex flex-row mb-4">
+                  Please upload a picture for your NFT
+              </div>
+              <Upload title={"Upload your Collab NFT Image"} onUploadSuccess={handleUploadSuccess} />
+              {(tokenUrl!="") && (
+              <Button
+                  onClick={ () => {
+                    if (setUpNFT) {
+                        conosle.log("setting up nft");
+                        setUpNFT();
+                        }
+                    }
+                  }
+            > Issue </Button>
+            )}
+          </div>
+        </DialogContent>
+      )}
     </Dialog>
   );
 };
@@ -125,13 +166,12 @@ function CopyableURL({ url }: { url: string }) {
 
   return (
     <div className="flex items-center space-x-2">
-      <span className="break-words whitespace-normal">{url}</span>
+      <span className="break-all whitespace-normal my-2">{url}</span> {/* <-- Added the break-words class here */}
       <button
         onClick={handleCopyClick}
         className="text-blue-500 hover:text-blue-700"
       >
         {isCopied ? "Copied!" : "Copy"}
-        {/* You can replace the above text with an icon if you prefer */}
       </button>
     </div>
   );
@@ -158,7 +198,7 @@ function CollabList({ blocks }: CollabListProps) {
     <div>
       <div className="grid grid-cols-3 gap-4">
         {blocks.map((block, index) => (
-          <div key={index} className="border p-4 rounded-3xl">
+          <div key={index} className="w-96 h-80 rounded-3xl border border-zinc-100">
             <h3 className="font-bold">{block.name}</h3>
             <p className="text-sm text-gray-600">
               {" "}
@@ -189,7 +229,7 @@ function CollabDashboard() {
   const { data: campaigns, isLoading, isSuccess } = useGetAllCampaigns();
   console.log(campaigns);
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="flex flex-col items-center justify-center py-2">
       {isSuccess && <CollabList blocks={campaigns} />}
     </div>
   );

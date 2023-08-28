@@ -1,4 +1,13 @@
 import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+   DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -40,15 +49,14 @@ function CollabDetail({
   const { write, isLoading } = useWithdrawReward(collab.id);
   const mintLink = `${origin}/followers/${address}@${collab.id.toString()}`;
   return (
-    <div className="fixed inset-x-12 inset-y-20 z-50 flex items-center justify-center bg-white">
-      <div className="flex flex-col bg-white p-8 w-full h-full overflow-auto">
-        <button
-          onClick={onClose}
-          className="float-right text-gray-500 hover:text-gray-700"
-        >
+      <div>
+    <Dialog isOpen={true} onClose={onClose}>
+      <DialogHeader>
+        <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
           &times;
         </button>
-        <div className="w-4/5 h-1/4 border rounded-3xl m-16">
+      </DialogHeader>
+      <DialogContent>
           <div className="mt-4 ml-4 mb-4">
             <h3 className="font-bold text-xl">{collab.Title}</h3>
             <div className="flex flex-row mb-4">
@@ -81,9 +89,12 @@ function CollabDetail({
               {isLoading || !write ? "Loading" : "Withdraw"}
             </button>
           </div>
-        </div>
-      </div>
-    </div>
+      </DialogContent>
+      <DialogFooter>
+        {/* You can add footer content if needed */}
+      </DialogFooter>
+    </Dialog>
+</div>
   );
 }
 
