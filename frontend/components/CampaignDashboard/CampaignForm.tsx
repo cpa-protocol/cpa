@@ -130,7 +130,7 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
               </FormItem>
             )}
           />
-          <Upload onUploadSuccess={handleUploadSuccess} />
+          <Upload title={"Upload the config to retrieve eligible address"} onUploadSuccess={handleUploadSuccess} />
 
           <div className="flex flex-row items-center w-full space-x-2 justify-between">
             <Button type="submit" className="mt-4">
