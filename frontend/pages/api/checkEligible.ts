@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { NextApiRequest, NextApiResponse } from "next";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import axios from "axios";
@@ -23,7 +24,11 @@ export default async function handler(
     // Create a sandboxed environment to safely evaluate the JS content
       const sandbox = {
                 module: {
-        exports: {}
+                    exports: {
+                        apiEndpoint: "",
+                        graphqlQuery: "",
+                        checkFunction: (data: `0x${string}`) => {}
+                    }
       }
       };
     vm.createContext(sandbox);
