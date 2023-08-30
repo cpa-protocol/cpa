@@ -27,7 +27,8 @@ function MyComponent() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ addresses, configHash }),
-      }); const data = await response.json();
+      });
+      const data = await response.json();
       setResult(data);
     } catch (error) {
       console.error("Error calling API:", error);
@@ -41,7 +42,6 @@ function MyComponent() {
     </div>
   );
 }
-
 
 const Home: NextPage = () => {
   const { address, connector, isConnected } = useAccount();

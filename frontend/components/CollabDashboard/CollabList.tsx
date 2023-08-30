@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { formatEther } from "viem";
 import useWithdrawReward from "@/hooks/useWithdrawReward";
 import useGetAllCampaigns from "@/hooks/useGetAllCampaigns";
@@ -43,7 +43,6 @@ type IssueCollabNFTProps = {
 };
 
 const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
-
   const [tokenUrl, setTokenUrl] = useState("");
 
   const { write: setUpNFT, isLoading: setupNFTIsLoading } = useSetUpNFT(
@@ -56,7 +55,7 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
     campaign.id,
   );
   //@ts-ignore
-  const contractExist = data 
+  const contractExist = data
     ? data[2] == "0x0000000000000000000000000000000000000000"
     : false;
 
@@ -77,15 +76,17 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
   return (
     <Dialog>
       <DialogTrigger>
-          {setupNFTIsLoading ? "Loading" : contractExist ? (
-              <Button className='ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow'>
-                  Issue Collab NFT
-              </Button>
-          ): (
-              <Button className='ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow'>
-              View Details
-              </Button>
-          )}
+        {setupNFTIsLoading ? (
+          "Loading"
+        ) : contractExist ? (
+          <Button className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow">
+            Issue Collab NFT
+          </Button>
+        ) : (
+          <Button className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow">
+            View Details
+          </Button>
+        )}
       </DialogTrigger>
       {!contractExist && (
         <DialogContent>
@@ -111,13 +112,13 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
             </div>
             <CopyableURL url={mintLink} />
             {/* Add more details as needed */}
-            <Button onClick={ () => {
+            <Button
+              onClick={() => {
                 if (withdrawReward) {
-                    withdrawReward();
-                    }
+                  withdrawReward();
                 }
-            }
-            className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow"
+              }}
+              className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow"
             >
               {isLoading || !withdrawReward ? "Loading" : "Claim Reward"}
             </Button>
@@ -131,20 +132,25 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
             <h3 className="font-bold text-xl">{campaign.name}</h3>
           </DialogHeader>
           <div className="mt-4 ml-4 mb-4">
-              <div className="flex flex-row mb-4">
-                  Please upload a picture for your NFT
-              </div>
-              <Upload title={"Upload your Collab NFT Image"} onUploadSuccess={handleUploadSuccess} />
-              {(tokenUrl!="") && (
+            <div className="flex flex-row mb-4">
+              Please upload a picture for your NFT
+            </div>
+            <Upload
+              title={"Upload your Collab NFT Image"}
+              onUploadSuccess={handleUploadSuccess}
+            />
+            {tokenUrl != "" && (
               <Button
-                  onClick={ () => {
-                    if (setUpNFT) {
-                        conosle.log("setting up nft");
-                        setUpNFT();
-                        }
-                    }
+                onClick={() => {
+                  if (setUpNFT) {
+                    conosle.log("setting up nft");
+                    setUpNFT();
                   }
-            > Issue </Button>
+                }}
+              >
+                {" "}
+                Issue{" "}
+              </Button>
             )}
           </div>
         </DialogContent>
@@ -167,7 +173,8 @@ function CopyableURL({ url }: { url: string }) {
 
   return (
     <div className="flex items-center space-x-2">
-      <span className="break-all whitespace-normal my-2">{url}</span> {/* <-- Added the break-words class here */}
+      <span className="break-all whitespace-normal my-2">{url}</span>{" "}
+      {/* <-- Added the break-words class here */}
       <button
         onClick={handleCopyClick}
         className="text-blue-500 hover:text-blue-700"
@@ -177,7 +184,6 @@ function CopyableURL({ url }: { url: string }) {
     </div>
   );
 }
-
 
 function CollabList({ blocks }: CollabListProps) {
   const { address, connector, isConnected } = useAccount();
@@ -199,7 +205,10 @@ function CollabList({ blocks }: CollabListProps) {
     <div>
       <div className="grid grid-cols-3 gap-4">
         {blocks.map((block, index) => (
-          <div key={index} className="w-80 h-60 rounded-3xl border-4 border-zinc-100">
+          <div
+            key={index}
+            className="w-80 h-60 rounded-3xl border-4 border-zinc-100"
+          >
             <h3 className="font-bold m-6">{block.name}</h3>
             <div className="text-sm text-gray-600 ml-6">
               {" "}
@@ -209,10 +218,7 @@ function CollabList({ blocks }: CollabListProps) {
               {" "}
               Reward per action : {formatEther(`${block.cpa}`)} ETH
             </div>
-            <IssueCollabNFT
-              campaign={block}
-              address={address}
-            />
+            <IssueCollabNFT campaign={block} address={address} />
           </div>
         ))}
       </div>

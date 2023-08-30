@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import React, { useState } from "react";
 import Upload from "../Upload";
 import Link from "next/link";
@@ -124,16 +124,26 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
             />
           </div>
 
-          <Upload title={"Upload the config to retrieve eligible address"} onUploadSuccess={handleUploadSuccess} />
+          <Upload
+            title={"Upload the config to retrieve eligible address"}
+            onUploadSuccess={handleUploadSuccess}
+          />
 
           <div className="flex flex-row items-center w-full space-x-2 justify-between">
-            <Button type="submit" className="mt-4 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow">
-              {!isLoading && !isSuccess && (<div> Submit</div>)}
-              {isLoading && ( <div> Creating... </div>)}
-              {isSuccess && ( <div> Created! </div>)}
+            <Button
+              type="submit"
+              className="mt-4 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow"
+            >
+              {!isLoading && !isSuccess && <div> Submit</div>}
+              {isLoading && <div> Creating... </div>}
+              {isSuccess && <div> Created! </div>}
             </Button>
-            <Button type="button" className="mt-4 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow" onClick={onClose}>
-              {!isLoading && !isSuccess && (<div> Cancel </div>)}
+            <Button
+              type="button"
+              className="mt-4 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow"
+              onClick={onClose}
+            >
+              {!isLoading && !isSuccess && <div> Cancel </div>}
             </Button>
           </div>
         </form>

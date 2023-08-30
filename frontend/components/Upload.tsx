@@ -43,7 +43,7 @@ export default function Upload({ title, onUploadSuccess }: UploadProps) {
       {!uploading && !ipfsUrl && (
         <div>
           <label className="text-gray-700 font-bold mb-2" htmlFor="file">
-              {title}
+            {title}
           </label>
           <div className="relative border-dashed border-2 border-gray-400 rounded-lg h-64 flex justify-center items-center">
             <div className="absolute">
