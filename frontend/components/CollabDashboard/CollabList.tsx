@@ -78,11 +78,11 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
     <Dialog>
       <DialogTrigger>
           {setupNFTIsLoading ? "Loading" : contractExist ? (
-              <Button>
+              <Button className='ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow'>
                   Issue Collab NFT
               </Button>
           ): (
-              <Button>
+              <Button className='ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow'>
               View Details
               </Button>
           )}
@@ -117,6 +117,7 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
                     }
                 }
             }
+            className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow"
             >
               {isLoading || !withdrawReward ? "Loading" : "Claim Reward"}
             </Button>
@@ -198,16 +199,16 @@ function CollabList({ blocks }: CollabListProps) {
     <div>
       <div className="grid grid-cols-3 gap-4">
         {blocks.map((block, index) => (
-          <div key={index} className="w-96 h-80 rounded-3xl border border-zinc-100">
-            <h3 className="font-bold">{block.name}</h3>
-            <p className="text-sm text-gray-600">
+          <div key={index} className="w-80 h-60 rounded-3xl border-4 border-zinc-100">
+            <h3 className="font-bold m-6">{block.name}</h3>
+            <div className="text-sm text-gray-600 ml-6">
               {" "}
               Remaining Quota: {`${block.audience}`}
-            </p>
-            <p className="text-sm text-gray-600 mb-10">
+            </div>
+            <div className="text-sm text-gray-600 mb-10 ml-6">
               {" "}
               Reward per action : {formatEther(`${block.cpa}`)} ETH
-            </p>
+            </div>
             <IssueCollabNFT
               campaign={block}
               address={address}
