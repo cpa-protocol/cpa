@@ -56,7 +56,7 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
   // @ts-ignore
   const { write, isLoading, isSuccess, data } = useCreateCampaign(
     campaignName,
-    promoteAddress,
+    promoteAddress as `0x${string}`,
     reward,
     cpa,
     graphQL,
