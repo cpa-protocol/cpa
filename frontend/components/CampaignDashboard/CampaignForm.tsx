@@ -56,7 +56,6 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
   const cpa = Number(watch("Cpa") ?? 0);
   const graphQL = watch("GraphQL");
   const campaignName = watch("CampaignName");
-  const promoteAddress = watch("Address");
   const targetSize = Number(watch("TargetAudienceSize") ?? 0);
   const reward = cpa * targetSize;
 
