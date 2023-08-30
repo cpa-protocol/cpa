@@ -29,7 +29,9 @@ const Protocol: NextPage = () => {
         ) : (
           <>
             <div className="flex flex-col justify-left">
-              <div className="text-3xl m-4">Explore Campaigns</div>
+              <div className="w-56 h-7 text-black text-2xl font-bold">
+                Explore Campaigns
+              </div>
               <CollabDashboard />
             </div>
           </>

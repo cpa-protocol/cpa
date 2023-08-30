@@ -67,10 +67,10 @@ function FilteredBlock({ block }: { block: Campaign }) {
   const { data: owner, isLoading, isSuccess } = useGetCampaignOwner(block.id);
   if (owner == address) {
     return (
-      <div className="border p-4 rounded-3xl">
-        <h3 className="font-bold">{block.name}</h3>
-        <p className="text-sm text-gray-600 mb-10">{block.createTime}</p>
-        <p className="">
+      <div className="w-80 h-60 rounded-3xl border-4 border-zinc-100">
+        <h3 className="font-bold m-6">{block.name}</h3>
+        <p className="text-sm text-gray-600 mb-10 ml-6">{block.createTime}</p>
+        <p className="ml-6">
           {`${block.audience - block.reward / block.cpa}`} /{" "}
           {`${block.audience}`} claimed{" "}
         </p>

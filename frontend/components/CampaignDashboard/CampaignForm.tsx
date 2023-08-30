@@ -1,5 +1,14 @@
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import React, { useState } from "react";
 import Upload from "../Upload";
 import Link from "next/link";
@@ -23,7 +32,6 @@ const FormSchema = z.object({
   CampaignName: z.string(),
   TargetAudienceSize: z.coerce.number(),
   Cpa: z.coerce.number(),
-  Address: z.string(),
   GraphQL: z.string(),
 });
 
@@ -48,7 +56,6 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
   const cpa = Number(watch("Cpa") ?? 0);
   const graphQL = watch("GraphQL");
   const campaignName = watch("CampaignName");
-  const promoteAddress = watch("Address");
   const targetSize = Number(watch("TargetAudienceSize") ?? 0);
   const reward = cpa * targetSize;
 
@@ -56,7 +63,7 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
   // @ts-ignore
   const { write, isLoading, isSuccess, data } = useCreateCampaign(
     campaignName,
-    promoteAddress,
+    "0x0000000000000000000000000000000000000000" as `0x${string}`,
     reward,
     cpa,
     graphQL,
@@ -116,28 +123,26 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="Address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel> Contract to promote </FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} placeholder="0x123..." />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+          <Upload
+            title={"Upload the config to retrieve eligible address"}
+            onUploadSuccess={handleUploadSuccess}
           />
-          <Upload onUploadSuccess={handleUploadSuccess} />
 
           <div className="flex flex-row items-center w-full space-x-2 justify-between">
-            <Button type="submit" className="mt-4">
-              Submit
+            <Button
+              type="submit"
+              className="mt-4 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow"
+            >
+              {!isLoading && !isSuccess && <div> Submit</div>}
+              {isLoading && <div> Creating... </div>}
+              {isSuccess && <div> Created! </div>}
             </Button>
-            <Button type="button" className="mt-4" onClick={onClose}>
-              Cancel
+            <Button
+              type="button"
+              className="mt-4 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow"
+              onClick={onClose}
+            >
+              {!isLoading && !isSuccess && <div> Cancel </div>}
             </Button>
           </div>
         </form>

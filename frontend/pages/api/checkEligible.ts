@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { NextApiRequest, NextApiResponse } from "next";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import axios from "axios";
@@ -21,11 +22,15 @@ export default async function handler(
     );
 
     // Create a sandboxed environment to safely evaluate the JS content
-      const sandbox = {
-                module: {
-        exports: {}
-      }
-      };
+    const sandbox = {
+      module: {
+        exports: {
+          apiEndpoint: "",
+          graphqlQuery: "",
+          checkFunction: (data: `0x${string}`) => {},
+        },
+      },
+    };
     vm.createContext(sandbox);
     vm.runInContext(response.data, sandbox);
 
@@ -33,10 +38,9 @@ export default async function handler(
     config = sandbox.module.exports;
 
     console.log(config.apiEndpoint);
-
   } catch (error) {
-      console.log(`config is ${config}`);
-      console.log(error);
+    console.log(`config is ${config}`);
+    console.log(error);
     return res.status(400).json({ error: "Failed to fetch config from IPFS" });
   }
 
@@ -55,12 +59,12 @@ export default async function handler(
         query: gql(`{${config.graphqlQuery.replace("$address", address)}}`),
         variables: { address },
       });
-        const checkResult = config.checkFunction(data);
-        console.log(data);
-        console.log(checkResult);
+      const checkResult = config.checkFunction(data);
+      console.log(data);
+      console.log(checkResult);
 
       if (config.checkFunction(data)) {
-          results.push(address);
+        results.push(address);
       }
     } catch (error) {
       results.push({

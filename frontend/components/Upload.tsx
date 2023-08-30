@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Web3Storage } from "web3.storage";
 
 type UploadProps = {
+  title: string;
   onUploadSuccess: (url: string) => void;
 };
 
-export default function Upload({ onUploadSuccess }: UploadProps) {
+export default function Upload({ title, onUploadSuccess }: UploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [ipfsUrl, setIpfsUrl] = useState("");
@@ -42,7 +43,7 @@ export default function Upload({ onUploadSuccess }: UploadProps) {
       {!uploading && !ipfsUrl && (
         <div>
           <label className="text-gray-700 font-bold mb-2" htmlFor="file">
-            Upload your GraphQL Code Here
+            {title}
           </label>
           <div className="relative border-dashed border-2 border-gray-400 rounded-lg h-64 flex justify-center items-center">
             <div className="absolute">
@@ -62,14 +63,13 @@ export default function Upload({ onUploadSuccess }: UploadProps) {
         </div>
       )}
       {!ipfsUrl ? (
-        <button
-          type="button"
-          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        <Button
+          className="mt-4 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow"
           onClick={handleUpload}
           disabled={!file || uploading}
         >
           {uploading ? "Uploading..." : "Upload"}
-        </button>
+        </Button>
       ) : (
         <div className="mt-8">
           <p className="text-gray-700 font-bold">Successfully Uploaded!</p>
