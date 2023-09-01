@@ -143,7 +143,6 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
               <Button
                 onClick={() => {
                   if (setUpNFT) {
-                    conosle.log("setting up nft");
                     setUpNFT();
                   }
                 }}
