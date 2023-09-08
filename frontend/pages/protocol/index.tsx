@@ -33,12 +33,7 @@ const Protocol: NextPage = () => {
           <>
             <div className="flex flex-col justify-left w-full">
               <div className="text-3xl m-4">Campaign Dashboard</div>
-              {ownedBlocksCount === 0 && (
-                <div className="text-xl m-4">
-                  You didn't have any campaign yet, try to create one
-                </div>
-              )}
-              <MyCampaignDashboard setOwnedBlocksCount={setOwnedBlocksCount} />
+              <MyCampaignDashboard />
             </div>
           </>
         )}
