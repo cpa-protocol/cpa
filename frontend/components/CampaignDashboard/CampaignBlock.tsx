@@ -46,15 +46,17 @@ function BlocksList({ blocks }: { blocks: Campaign[] }) {
   const [showPopup, setShowPopup] = useState(false);
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="flex flex-wrap items-center justify-center max-w-6xl mx-auto">
       {blocks.map((block, index) => (
         <FilteredBlock block={block} key={index} />
       ))}
       <div
-        className="border p-4 rounded-3xl text-gray-400 cursor-pointer text-center"
+        className="w-80 h-60 rounded-3xl border-4 border-zinc-100 m-4 text-center"
         onClick={() => setShowPopup(true)}
       >
-        Create New
+        <div className="mt-[6rem]">
+        [Create New]
+    </div>
       </div>
       {showPopup && <AddBlockPopup onClose={() => setShowPopup(false)} />}
     </div>
@@ -67,7 +69,7 @@ function FilteredBlock({ block }: { block: Campaign }) {
   const { data: owner, isLoading, isSuccess } = useGetCampaignOwner(block.id);
   if (owner == address) {
     return (
-      <div className="w-80 h-60 rounded-3xl border-4 border-zinc-100">
+      <div className="w-80 h-60 rounded-3xl border-4 border-zinc-100 m-4">
         <h3 className="font-bold m-6">{block.name}</h3>
         <p className="text-sm text-gray-600 mb-10 ml-6">{block.createTime}</p>
         <p className="ml-6">

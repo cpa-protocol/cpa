@@ -15,7 +15,7 @@ import Link from "next/link";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import useCreateCampaign from "@/hooks/useCreateCampaign";
 import {
   Form,
@@ -49,7 +49,7 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
   });
   const { watch } = form;
   const handleUploadSuccess = (url: string) => {
-    console.log(url);
+    // console.log(url);
     form.setValue("GraphQL", url);
   };
   const audienceSize = watch("TargetAudienceSize");

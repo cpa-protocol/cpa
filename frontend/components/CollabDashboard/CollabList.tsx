@@ -143,7 +143,6 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
               <Button
                 onClick={() => {
                   if (setUpNFT) {
-                    conosle.log("setting up nft");
                     setUpNFT();
                   }
                 }}
@@ -203,11 +202,11 @@ function CollabList({ blocks }: CollabListProps) {
 
   return (
     <div>
-      <div className="grid grid-cols-3 gap-4">
+    <div className="flex flex-wrap items-center justify-center max-w-6xl mx-auto">
         {blocks.map((block, index) => (
           <div
             key={index}
-            className="w-80 h-60 rounded-3xl border-4 border-zinc-100"
+            className="w-80 h-60 rounded-3xl border-4 border-zinc-100 m-4"
           >
             <h3 className="font-bold m-6">{block.name}</h3>
             <div className="text-sm text-gray-600 ml-6">

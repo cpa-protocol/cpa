@@ -1,4 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useState } from "react";
 import MyCampaignDashboard from "@/components/CampaignDashboard/CampaignBlock";
 import SelectRole from "@/components/SelectRole/SelectRole";
 import { useIsMounted } from "@/hooks/useIsMounted";
@@ -10,9 +11,12 @@ import styles from "@/styles/Home.module.css";
 const Protocol: NextPage = () => {
   const { address, connector, isConnected } = useAccount();
   const isMounted = useIsMounted();
+  const [ownedBlocksCount, setOwnedBlocksCount] = useState<number>(0);
+
   if (!isMounted) {
     return null;
   }
+
   return (
     <>
       <main className={styles.main}>
@@ -27,7 +31,7 @@ const Protocol: NextPage = () => {
           </>
         ) : (
           <>
-            <div className="flex flex-col justify-left">
+            <div className="flex flex-col justify-left w-full">
               <div className="text-3xl m-4">Campaign Dashboard</div>
               <MyCampaignDashboard />
             </div>
