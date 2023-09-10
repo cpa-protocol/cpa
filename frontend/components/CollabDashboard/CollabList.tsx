@@ -55,6 +55,8 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
     address,
     campaign.id,
   );
+
+  const { data: owner} = useGetCampaignOwner(campaign.id);
   //@ts-ignore
   const contractExist = data
     ? data[2] == "0x0000000000000000000000000000000000000000"
@@ -90,11 +92,17 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
         )}
       </DialogTrigger>
       {!contractExist && (
-        <DialogContent>
+          <DialogContent className="w-4/5">
           <DialogHeader>
-            <h3 className="font-bold text-xl">{campaign.name}</h3>
+            <div className="flex ml-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full" />
+                 <a className="ml-4 mt-3 mb-6" target="_blank" href={`https://goerli-optimism.etherscan.io/address/${owner}`}>
+                     {owner.substring(0, 9).concat('...')} 
+                </a>
+            </div>
+            <h3 className="ml-4 font-bold text-xl">{campaign.name}</h3>
           </DialogHeader>
-          <div className="mt-4 ml-4 mb-4">
+          <div className=" ml-4 mb-4">
             <div className="flex flex-row mb-4">
               <div className="w-14 h-7 rounded-3xl text-base font-bold flex justify-center items-center">
                 Quota:
