@@ -12,6 +12,7 @@ import {
 import { formatEther } from "viem";
 import useWithdrawReward from "@/hooks/useWithdrawReward";
 import useGetAllCampaigns from "@/hooks/useGetAllCampaigns";
+import useGetCampaignOwner from "@/hooks/useGetCampaignOwner";
 import useInfluencersNftContract from "@/hooks/useInfluencersNftContract";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
@@ -54,6 +55,8 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
     address,
     campaign.id,
   );
+
+  const { data: owner} = useGetCampaignOwner(campaign.id);
   //@ts-ignore
   const contractExist = data
     ? data[2] == "0x0000000000000000000000000000000000000000"
@@ -79,21 +82,27 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
         {setupNFTIsLoading ? (
           "Loading"
         ) : contractExist ? (
-          <Button className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow">
+          <Button className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow mb-6">
             Issue Collab NFT
           </Button>
         ) : (
-          <Button className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow">
+          <Button className="ml-6 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-3xl shadow mb-6">
             View Details
           </Button>
         )}
       </DialogTrigger>
       {!contractExist && (
-        <DialogContent>
+          <DialogContent className="w-4/5">
           <DialogHeader>
-            <h3 className="font-bold text-xl">{campaign.name}</h3>
+            <div className="flex ml-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full" />
+                 <a className="ml-4 mt-3 mb-6" target="_blank" href={`https://goerli-optimism.etherscan.io/address/${owner}`}>
+                     {owner.substring(0, 9).concat('...')} 
+                </a>
+            </div>
+            <h3 className="ml-4 font-bold text-xl">{campaign.name}</h3>
           </DialogHeader>
-          <div className="mt-4 ml-4 mb-4">
+          <div className=" ml-4 mb-4">
             <div className="flex flex-row mb-4">
               <div className="w-14 h-7 rounded-3xl text-base font-bold flex justify-center items-center">
                 Quota:
@@ -193,7 +202,6 @@ function CollabList({ blocks }: CollabListProps) {
   const { data: campaigns, isLoading, isSuccess } = useGetAllCampaigns();
   console.log(`campaigns are ${campaigns}`);
 
-  // console.log(useInfluencersNftContract(address, 1).data[2]);
   const handleViewDetails = (collab: campaign) => {
     setSelectedCollab(collab);
     console.log(collab);
@@ -202,23 +210,9 @@ function CollabList({ blocks }: CollabListProps) {
 
   return (
     <div>
-    <div className="flex flex-wrap items-center justify-center max-w-6xl mx-auto">
+      <div className="flex flex-wrap items-center justify-center max-w-6xl mx-auto">
         {blocks.map((block, index) => (
-          <div
-            key={index}
-            className="w-80 h-60 rounded-3xl border-4 border-zinc-100 m-4"
-          >
-            <h3 className="font-bold m-6">{block.name}</h3>
-            <div className="text-sm text-gray-600 ml-6">
-              {" "}
-              Remaining Quota: {`${block.audience}`}
-            </div>
-            <div className="text-sm text-gray-600 mb-10 ml-6">
-              {" "}
-              Reward per action : {formatEther(`${block.cpa}`)} ETH
-            </div>
-            <IssueCollabNFT campaign={block} address={address} />
-          </div>
+          <BlockComponent key={index} block={block} address={address} />
         ))}
       </div>
       {showDetails && (
@@ -230,6 +224,36 @@ function CollabList({ blocks }: CollabListProps) {
     </div>
   );
 }
+
+type BlockComponentProps = {
+  block: any; // You can replace 'any' with the appropriate type for 'block'
+  address: string;
+};
+
+const BlockComponent: React.FC<BlockComponentProps> = ({ block, address }) => {
+  const { data: owner, isLoading, isSuccess } = useGetCampaignOwner(block.id);
+
+  return (
+    <div className="w-80 rounded-3xl border-4 border-zinc-100 m-4">
+     <div className="flex ml-6 mt-6">
+      <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full" />
+     <a className="ml-6 mt-3" target="_blank" href={`https://goerli-optimism.etherscan.io/address/${owner}`}>
+         {owner.substring(0, 9).concat('...')} 
+    </a>
+    </div>
+      <h3 className="font-bold m-6">{block.name}</h3>
+      <div className="text-sm text-gray-600 ml-6">
+        {" "}
+        Remaining Quota: {`${block.audience}`}
+      </div>
+      <div className="text-sm text-gray-600 mb-6 ml-6">
+        {" "}
+        Reward per action : {formatEther(`${block.cpa}`)} ETH
+      </div>
+      <IssueCollabNFT campaign={block} address={address} />
+    </div>
+  );
+};
 
 function CollabDashboard() {
   const { data: campaigns, isLoading, isSuccess } = useGetAllCampaigns();
