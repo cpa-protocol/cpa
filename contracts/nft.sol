@@ -11,7 +11,12 @@ import "hardhat/console.sol";
 
 
 contract NFT {
-    address zoraFatory = 0xb0C56317E9cEBc6E0f7A59458a83D0A9ccC3e955;
+
+    // OP
+    // address zoraFatory = 0xb0C56317E9cEBc6E0f7A59458a83D0A9ccC3e955;
+    // Base
+    address zoraFatory = 0x9168C5ba5a0a76db8A1BF5b2eE5557f2A0ECA4f4;
+
     address private owner;
     address private cpa;
 
@@ -22,10 +27,12 @@ contract NFT {
     }
 
     mapping(address => mapping(uint256 => InfluencerNFT)) public influencersNftContract;
+    mapping(uint256 => address) public campaignFactory;
 
     event OwnerSet(address indexed oldOwner, address indexed newOwner);
     event CreateZoraContract(address nftContract);
     event CreateToken(uint256 indexed campaignId,address indexed owner, uint256 tokenId);
+
 
     constructor(address _cpa) {
         console.log("Owner contract deployed by:", msg.sender);
@@ -43,19 +50,22 @@ contract NFT {
             1000
         );
         IZoraCreator1155Factory factory = IZoraCreator1155Factory(zoraFatory);
-        address deployedAddress = factory.createContract(
-            contractURI,
-            campaignName,
-            ICreatorRoyaltiesControl.RoyaltyConfiguration({
-                royaltyBPS: 0,
-                royaltyRecipient: msg.sender,
-                royaltyMintSchedule: 0
-            }),
-            payable(address(this)),
-            initSetup
-        );
-
-        emit CreateZoraContract(deployedAddress);
+        address deployedAddress = campaignFactory[campaignId];
+        if(deployedAddress == address(0)){
+            deployedAddress = factory.createContract(
+                contractURI,
+                campaignName,
+                ICreatorRoyaltiesControl.RoyaltyConfiguration({
+                    royaltyBPS: 0,
+                    royaltyRecipient: msg.sender,
+                    royaltyMintSchedule: 0
+                }),
+                payable(address(this)),
+                initSetup
+            );
+            campaignFactory[campaignId] = deployedAddress;
+            emit CreateZoraContract(deployedAddress);
+        }
 
         IZoraCreator1155 target = IZoraCreator1155(deployedAddress);
         uint256 tokenId = target.setupNewToken("ipfs://test", 1000);
@@ -79,5 +89,4 @@ contract NFT {
         
         return true;
     }
-
 }
