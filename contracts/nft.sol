@@ -1,21 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.20;
 
-pragma solidity 0.8.17;
-
-import {CPA }from "./cpa.sol";
-import { IZoraCreator1155Factory } from "https://github.com/ourzora/zora-1155-contracts/blob/main/src/interfaces/IZoraCreator1155Factory.sol";
-import { ICreatorRoyaltiesControl } from "https://github.com/ourzora/zora-1155-contracts/blob/main/src/interfaces/ICreatorRoyaltiesControl.sol";
-import { IZoraCreator1155 } from "https://github.com/ourzora/zora-1155-contracts/blob/main/src/interfaces/IZoraCreator1155.sol";
-import {IMinter1155} from "https://github.com/ourzora/zora-1155-contracts/blob/main/src/interfaces/IMinter1155.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC1155/ERC1155.sol";
+import "./ERC1155Token.sol";
 import "hardhat/console.sol";
-
+import { CPA }from "./cpa.sol";
 
 contract NFT {
-
-    // OP
-    // address zoraFatory = 0xb0C56317E9cEBc6E0f7A59458a83D0A9ccC3e955;
-    // Base
-    address zoraFatory = 0x9168C5ba5a0a76db8A1BF5b2eE5557f2A0ECA4f4;
 
     address private owner;
     address private cpa;
@@ -23,57 +14,36 @@ contract NFT {
     struct InfluencerNFT {
         uint256 campaignId; 
         uint256 tokenId;
-        address zora;
+        address nft;
     }
-
     mapping(address => mapping(uint256 => InfluencerNFT)) public influencersNftContract;
+    mapping(uint256 => uint) public campaignNftId;
     mapping(uint256 => address) public campaignFactory;
 
     event OwnerSet(address indexed oldOwner, address indexed newOwner);
-    event CreateZoraContract(address nftContract);
+    event CreateNFTContract(address nftContract);
     event CreateToken(uint256 indexed campaignId,address indexed owner, uint256 tokenId);
 
-
     constructor(address _cpa) {
-        console.log("Owner contract deployed by:", msg.sender);
         owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
         cpa = _cpa;
         emit OwnerSet(address(0), owner);
     }
 
     function setUpNFT(uint256 campaignId,string memory campaignName, string memory contractURI) public {
-    
-        bytes[] memory initSetup = new bytes[](1);
-        initSetup[0] = abi.encodeWithSelector(
-            IZoraCreator1155.setupNewToken.selector,
-            "ipfs://test",
-            1000
-        );
-        IZoraCreator1155Factory factory = IZoraCreator1155Factory(zoraFatory);
+        uint tokenId = campaignNftId[campaignId];
         address deployedAddress = campaignFactory[campaignId];
-        if(deployedAddress == address(0)){
-            deployedAddress = factory.createContract(
-                contractURI,
-                campaignName,
-                ICreatorRoyaltiesControl.RoyaltyConfiguration({
-                    royaltyBPS: 0,
-                    royaltyRecipient: msg.sender,
-                    royaltyMintSchedule: 0
-                }),
-                payable(address(this)),
-                initSetup
-            );
-            campaignFactory[campaignId] = deployedAddress;
-            emit CreateZoraContract(deployedAddress);
-        }
 
-        IZoraCreator1155 target = IZoraCreator1155(deployedAddress);
-        uint256 tokenId = target.setupNewToken("ipfs://test", 1000);
+        if(deployedAddress == address(0)){
+            deployedAddress = address(new ERC1155Token(campaignName, contractURI, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]));
+            campaignFactory[campaignId] = (deployedAddress);
+            emit CreateNFTContract(deployedAddress);
+        }
 
         InfluencerNFT memory newInfluencerNft;
         newInfluencerNft.campaignId = campaignId;
         newInfluencerNft.tokenId = tokenId;
-        newInfluencerNft.zora = deployedAddress;
+        newInfluencerNft.nft = deployedAddress;
 
         influencersNftContract[msg.sender][campaignId] = newInfluencerNft;
         CPA(cpa).updateInfluencerTokenId(campaignId, msg.sender, tokenId);
@@ -83,9 +53,10 @@ contract NFT {
 
     function mint(address influencer, uint256 campaignId) public returns (bool) {
         InfluencerNFT memory influencerNft = influencersNftContract[influencer][campaignId];
-        IZoraCreator1155 target = IZoraCreator1155(influencerNft.zora);
+        ERC1155Token target = ERC1155Token(influencerNft.nft);
+        console.log("Influencer NFT", influencerNft.nft);
         
-        target.adminMint(msg.sender, influencerNft.tokenId, 1, "");
+        target.mint(tx.origin, influencerNft.tokenId, 1);
         
         return true;
     }
