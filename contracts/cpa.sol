@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity 0.8.17;
+pragma solidity 0.8.20;
 
 import "hardhat/console.sol";
 
@@ -14,13 +14,6 @@ contract CPA {
     address private updater;
 
     uint256 public totalCampaignAmount;
-
-    address zoraFatory = 0xb0C56317E9cEBc6E0f7A59458a83D0A9ccC3e955;
-    address testZoraNftContract = 0x1391c815403e6240866BE5C07D4db6C2a4028D61;
-    
-    uint32 royaltyMintSchedule = 10;
-    uint32 royaltyBPS = 100;
-    
 
     struct Campaign{
         uint256 id;
