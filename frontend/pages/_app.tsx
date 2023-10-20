@@ -12,6 +12,8 @@ import {
 import type { AppProps } from "next/app";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
+  scrollSepolia,
+  polygonZkEvmTestnet,
   optimism,
   optimismGoerli,
   base,
@@ -49,6 +51,8 @@ const mode: Chain = {
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     // optimism,
+    scrollSepolia,
+    polygonZkEvmTestnet,
     optimismGoerli,
     mode,
     // base,
