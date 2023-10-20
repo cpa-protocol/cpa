@@ -12,7 +12,6 @@ import {
 import type { AppProps } from "next/app";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
-  scrollSepolia,
   polygonZkEvmTestnet,
   optimism,
   optimismGoerli,
@@ -23,26 +22,26 @@ import {
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
-const mode: Chain = {
-  id: 919,
-  name: "Mode Testnet",
-  network: "Mode Sepolia",
+const scrollSepolia: Chain = {
+  id: 534351,
+  name: "Scroll Testnet",
+  network: "Scroll Sepolia",
   iconUrl:
-    "https://uploads-ssl.webflow.com/64c906a6ed3c4d809558853b/64ccf2a2a43cf00fd443a5f3_Layer_1-2.svg",
+    "https://l2beat.com/icons/scroll.png",
   iconBackground: "#000",
   nativeCurrency: {
     decimals: 18,
-    name: "Mode Testnet",
+    name: "Scroll Testnet",
     symbol: "ETH",
   },
   rpcUrls: {
-    public: { http: ["https://sepolia.mode.network/"] },
-    default: { http: ["https://sepolia.mode.network/"] },
+    public: { http: ["https://scroll-sepolia.blockpi.network/v1/rpc/public"] },
+    default: { http: ["https://scroll-sepolia.blockpi.network/v1/rpc/public"] },
   },
   blockExplorers: {
     default: {
       name: "Explorer",
-      url: "https://sepolia.explorer.mode.network/",
+      url: "https://sepolia.scrollscan.com/",
     },
   },
   testnet: true,
@@ -54,7 +53,6 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
     scrollSepolia,
     polygonZkEvmTestnet,
     optimismGoerli,
-    mode,
     // base,
     baseGoerli,
     // zora,
