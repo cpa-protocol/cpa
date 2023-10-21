@@ -97,7 +97,7 @@ const IssueCollabNFT = ({ campaign, address }: IssueCollabNFTProps) => {
             <div className="flex ml-4">
               <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full" />
                  <a className="ml-4 mt-3 mb-6" target="_blank" href={`https://goerli-optimism.etherscan.io/address/${owner}`}>
-                     {!owner && (owner.substring(0, 9).concat('...'))} 
+                     {owner && (owner.substring(0, 9).concat('...'))} 
                 </a>
             </div>
             <h3 className="ml-4 font-bold text-xl">{campaign.name}</h3>
@@ -238,7 +238,7 @@ const BlockComponent: React.FC<BlockComponentProps> = ({ block, address }) => {
      <div className="flex ml-6 mt-6">
       <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full" />
      <a className="ml-6 mt-3" target="_blank" href={`https://goerli-optimism.etherscan.io/address/${owner}`}>
-         {!owner && (owner.substring(0, 9).concat('...'))} 
+         {owner && (owner.substring(0, 9).concat('...'))} 
     </a>
     </div>
       <h3 className="font-bold m-6">{block.name}</h3>
