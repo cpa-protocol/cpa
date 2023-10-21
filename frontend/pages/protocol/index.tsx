@@ -32,7 +32,7 @@ const Protocol: NextPage = () => {
         ) : (
           <>
             <div className="flex flex-col justify-left w-full">
-              <div className="text-3xl m-4">Campaign Dashboard</div>
+              <div className="text-3xl m-4">My Campaigns</div>
               <MyCampaignDashboard />
             </div>
           </>
