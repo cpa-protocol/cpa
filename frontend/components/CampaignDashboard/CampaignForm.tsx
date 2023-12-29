@@ -143,6 +143,7 @@ function CampaignForm({ onClose }: AddBlockPopupProps) {
               onClick={onClose}
             >
               {!isLoading && !isSuccess && <div> Cancel </div>}
+              {isSuccess && <div> Done </div>}
             </Button>
           </div>
         </form>
