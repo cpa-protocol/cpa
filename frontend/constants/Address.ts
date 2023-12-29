@@ -1,2 +1,2 @@
-export const NftAddress = "0x36fFf7A22998Bb508728A18C941aD0299342541E";
-export const CpaAddress = "0x5670a20A4e9199b9aa7B466492f908cc5Cba6652";
+export const NftAddress = "0x47625465f936920Efa00e33391125fCcfA106d84";
+export const CpaAddress = "0xe64154515166F86ce77c47B35dE3E6F0cCe4cBb5";
